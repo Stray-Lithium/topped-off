@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import StartScreen from './components/StartScreen';
+import NamesScreen from './components/NamesScreen';
+import IngredientsScreen from './components/IngredientsScreen';
+import Rules from './components/RulesScreen';
+import ChallengeScreen from './components/ChallengeScreen';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path='/' element={<StartScreen />}></Route>
+      <Route exact path='/names' element={<NamesScreen />}></Route>
+      <Route exact path='/ingredients' element={<IngredientsScreen />}></Route>
+      <Route exact path='/rules' element={<Rules />}></Route>
+      <Route
+        exact
+        path='/challenge/:ingredient'
+        element={<ChallengeScreen />}
+      ></Route>
+    </Routes>
   );
 }
 
