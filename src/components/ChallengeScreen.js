@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { lemonBlanks, lemonPrompts } from '../blanks/lemon';
-import { iceBlanks } from '../blanks/ice';
-import { oliveBlanks } from '../blanks/olive';
+import { iceBlank } from '../blanks/ice';
+import { oliveBlank } from '../blanks/olive';
+import { mojitoBlanks } from '../blanks/mojito';
+import { martiniCard } from '../cards/martini';
+import { whiskeyCard } from '../cards/whiskey';
+import { mojitoCard } from '../cards/mojito';
 import { lemonadeCard } from '../cards/lemonade';
 
 const ChallengeScreen = () => {
@@ -21,51 +26,56 @@ const ChallengeScreen = () => {
   const nameArray = () => {
     const newArray = [];
     Object.keys(names).forEach((name) => {
-      console.log({ name, checked: false });
-      newArray.push({ name, checked: false });
+      newArray.push({ name });
     });
-    // newArray.push(Object.keys(names), checked: false })
-    // setLemonPlayers(newArray);
-    // setCheckedPlayeys(newArray);
     return newArray;
   };
   const checkboxNames = nameArray();
 
   const currentName = () => {
-    const randomNameIndex = Math.floor(Math.random() * names.length) + 0;
-    const name = Object.values(names[randomNameIndex])[0];
-    return name.name;
+    const lengthOfNames = Object.values(names).length;
+    const randomNameIndex = Math.floor(Math.random() * lengthOfNames) + 0;
+    const name = Object.keys(names)[randomNameIndex];
+    return name;
   };
 
   const blankWord = () => {
-    let blankData = lemonBlanks;
+    // let blankData = lemonBlanks;
     if (ingredient === 'whiskey') {
-      blankData = iceBlanks;
+      // const ice = iceBlank();
+      // const whiskey = whiskeyCard(ice);
+      return whiskeyCard(iceBlank());
     }
     if (ingredient === 'martini') {
-      blankData = oliveBlanks;
+      // const olive = oliveBlank();
+      // const martini = martiniCard(olive);
+      return martiniCard(oliveBlank());
     }
-    const randomWordIndex = Math.floor(Math.random() * blankData.length) + 0;
-    const word = blankData[randomWordIndex];
-    return word;
+    if (ingredient === 'mojito') {
+      // const mojito = mojitoCard();
+      return mojitoCard();
+    }
+    // const randomWordIndex = Math.floor(Math.random() * blankData.length) + 0;
+    // const challenge = blankData[randomWordIndex];
+    return lemonadeCard();
+  };
+
+  const checkboxClick = (e, checkName) => {
+    const addToCheck = e.target.checked;
+    if (addToCheck) {
+      setLemonPlayers([...lemonPlayers, checkName]);
+    } else {
+      let filter = lemonPlayers.filter((player) => player !== checkName);
+      setLemonPlayers(filter);
+      console.log(filter, 'filter');
+    }
   };
 
   const confirm = () => {
     localStorage.setItem('lemonNames', JSON.stringify(lemonPlayers));
   };
 
-  const checkboxClick = (checkName) => {
-    const namesCopy = names;
-    let playerCheck = namesCopy[checkName].checked;
-    namesCopy[checkName].checked = !playerCheck;
-    console.log(namesCopy[checkName], 'example');
-    console.log(namesCopy, 'copy');
-    setNames(namesCopy);
-  };
-
-  // console.log(checkboxNames, checkedPlayers, 'check');
-
-  if (!names.length) {
+  if (Object.values(names).length) {
     return (
       <ScreenBackground>
         {ingredient === 'lemonade' ? (
@@ -87,22 +97,27 @@ const ChallengeScreen = () => {
                     <CheckboxSpacing>
                       <Checkbox
                         type='checkbox'
-                        onClick={() => checkboxClick(name.name)}
+                        onClick={(e) => checkboxClick(e, name.name)}
                       />
                     </CheckboxSpacing>
                   );
                 })}
               </Checkboxes>
             </CheckboxContainer>
-            <ConfirmButton>Confirm</ConfirmButton>
+            <Link
+              to={{
+                pathname: `/lemonade-challenge`,
+              }}
+            >
+              <ConfirmButton onClick={() => confirm()}>Confirm</ConfirmButton>
+            </Link>
             {/* <BlankWord>{lemonadeCard(blankWord())}</BlankWord> */}
           </ScreenContainer>
         ) : (
           <ScreenContainer>
-            <Title>This challenge is for</Title>
-            <Name>{`${currentName()}!`}</Name>
-            <Title>Black word is...</Title>
-            <BlankWord>{blankWord()}</BlankWord>
+            {/* <Title>This challenge is for</Title>
+            <Name>{`${currentName()}!`}</Name> */}
+            <BlankWord>{`${currentName()}! ${blankWord()}`}</BlankWord>
             <ChallengeComplete>Complete!</ChallengeComplete>
             <Drink>Drink!</Drink>
           </ScreenContainer>
@@ -156,7 +171,7 @@ const BlankWord = styled.h1`
   border-radius: 10px;
   border: solid 3px black;
   font-family: SunbirdRegular;
-  margin: 0px;
+  // margin: 0px;
   margin-bottom: 40px;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
@@ -190,7 +205,7 @@ const CheckboxContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 300px;
+  // height: 300px;
   width: 80%;
   margin-top: 40px;
   overflow-y: auto;
@@ -206,7 +221,7 @@ const Names = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  justify-content: space-between;
+  // justify-content: space-between;
   width: 50%;
 `;
 
@@ -219,7 +234,7 @@ const Checkboxes = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  // justify-content: space-between;
   width: 30%;
 `;
 
