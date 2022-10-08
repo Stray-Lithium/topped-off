@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import appBackground from '../assets/app-background.png';
 import { lemonadeCard } from '../cards/lemonade';
+import yellowCard from '../assets/yellow-card.png';
 
 const LemonadeChallenge = () => {
   const [names, setNames] = useState([]);
@@ -9,16 +11,19 @@ const LemonadeChallenge = () => {
   const [completedNames, setCompletedNames] = useState([]);
   const [challenge, setChallenge] = useState(false);
   const [scoreUpdate, setScoreUpdate] = useState(false);
+  const [whoCompleted, setWhoCompleted] = useState(false);
 
   const titleMaker = () => {
     const lemonLength = lemonNames.length;
     let title = '';
     lemonNames.forEach((name, index) => {
-      console.log(name, index);
-      if (lemonLength === 1 || index === lemonLength - 1) {
+      if (lemonLength === 1) {
+        console.log('first');
         title += `${name},`;
       } else if (index === lemonLength - 2) {
         title += `${name} and `;
+      } else {
+        title += `${name}, `;
       }
     });
     return title;
@@ -74,36 +79,49 @@ const LemonadeChallenge = () => {
     return (
       <ScreenBackground>
         {!scoreUpdate ? (
-          <ScreenContainer>
-            <BlankWord>
-              {titleMaker()} {challenge}
-            </BlankWord>
-            <Title>Who completed this challenge?</Title>
-            <CheckboxContainer>
-              <Names>
-                {lemonNames.map((name) => {
-                  return (
-                    <CheckboxSpacing>
-                      <CheckboxName>{name}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Names>
-              <Checkboxes>
-                {lemonNames.map((name) => {
-                  return (
-                    <CheckboxSpacing>
-                      <Checkbox
-                        type='checkbox'
-                        onClick={(e) => checkboxClick(e, name)}
-                      />
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Checkboxes>
-            </CheckboxContainer>
-            <ConfirmButton onClick={() => confirm()}>Confirm</ConfirmButton>
-          </ScreenContainer>
+          !whoCompleted ? (
+            <ScreenContainer>
+              <BackOfCardContainer>
+                <BackOfCard src={yellowCard} />
+                <CardContentContainer>
+                  <CardContent>
+                    {titleMaker()} {challenge}
+                  </CardContent>
+                </CardContentContainer>
+              </BackOfCardContainer>
+              <ConfirmButton onClick={() => setWhoCompleted(true)}>
+                OK
+              </ConfirmButton>
+            </ScreenContainer>
+          ) : (
+            <ScreenContainer>
+              <Title>WHO COMPLETED THE CHALLENGE?</Title>
+              <CheckboxContainer>
+                <Names>
+                  {lemonNames.map((name) => {
+                    return (
+                      <CheckboxSpacing>
+                        <CheckboxName>{name}</CheckboxName>
+                      </CheckboxSpacing>
+                    );
+                  })}
+                </Names>
+                <Checkboxes>
+                  {lemonNames.map((name) => {
+                    return (
+                      <CheckboxSpacing>
+                        <Checkbox
+                          type='checkbox'
+                          onClick={(e) => checkboxClick(e, name)}
+                        />
+                      </CheckboxSpacing>
+                    );
+                  })}
+                </Checkboxes>
+              </CheckboxContainer>
+              <ConfirmButton onClick={() => confirm()}>CONFIRM</ConfirmButton>
+            </ScreenContainer>
+          )
         ) : (
           <ScreenContainer>
             <Title>Scoreboard</Title>
@@ -132,7 +150,7 @@ const LemonadeChallenge = () => {
                 pathname: `/${drinkScreen()}`,
               }}
             >
-              <ConfirmButton>Confirm</ConfirmButton>
+              <ConfirmButton>CONFIRM</ConfirmButton>
             </Link>
           </ScreenContainer>
         )}
@@ -142,13 +160,17 @@ const LemonadeChallenge = () => {
 };
 
 const ScreenBackground = styled.div`
-  color: white;
   display: flex;
+  color: black;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  background-color: #808184;
+  justify-content: center;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  background-image: url(${appBackground});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 `;
 
 const ScreenContainer = styled.div`
@@ -157,11 +179,15 @@ const ScreenContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 90%;
+  margin-top: 20px;
 `;
 
 const Title = styled.h1`
-  margin: 0px;
+  font-family: SunbirdBlack;
+  letter-spacing: 2px;
   text-align: center;
+  font-size: 26px;
+  width: 80%;
 `;
 
 const BlankWord = styled.h1`
@@ -183,13 +209,14 @@ const CheckboxContainer = styled.div`
   justify-content: space-between;
   width: 80%;
   margin-top: 40px;
+  margin-bottom: 40px;
   overflow-y: auto;
 `;
 
 const CheckboxSpacing = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 50px;
 `;
 
 const Names = styled.div`
@@ -200,7 +227,7 @@ const Names = styled.div`
 `;
 
 const CheckboxName = styled.h2`
-  font-size: 28px;
+  font-size: 24px;
   margin: 0px;
 `;
 
@@ -221,15 +248,43 @@ const Checkbox = styled.input`
   padding: 10px;
 `;
 
+const BackOfCardContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BackOfCard = styled.img`
+  width: 80vw;
+`;
+
+const CardContentContainer = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const CardContent = styled.p`
+  font-size: 22px;
+  text-align: center;
+  width: 70%;
+`;
+
 const ConfirmButton = styled.button`
-  margin-top: 40px;
-  color: white;
+  color: black;
   background-color: #ee3347;
-  font-size: 40px;
-  padding: 10px;
-  border-radius: 20px;
+  font-size: 22px;
+  padding: 12px 0px 12px 0px;
+  letter-spacing: 3px;
+  margin-top: 20px;
+  width: 44vw;
+  border-radius: 10px;
   border: solid 3px black;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
 

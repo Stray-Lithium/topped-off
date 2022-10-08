@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import appBackground from '../assets/app-background.png';
 
 const DrinkScreen = () => {
   const [drinkers, setDrinkers] = useState([]);
@@ -34,7 +35,7 @@ const DrinkScreen = () => {
     return (
       <ScreenBackground>
         <ScreenContainer>
-          <Title>How many times must {drinkTitle()} drink?</Title>
+          <Title>HOW MANY TIMES MUST {drinkTitle()} DRINK?</Title>
           <DrinkCountContainer>
             {reveal ? (
               <DrinkNumberContainer>
@@ -62,13 +63,17 @@ const DrinkScreen = () => {
 };
 
 const ScreenBackground = styled.div`
-  color: white;
   display: flex;
+  color: black;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  background-color: #808184;
+  justify-content: center;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  background-image: url(${appBackground});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 `;
 
 const ScreenContainer = styled.div`

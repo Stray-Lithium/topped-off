@@ -1,11 +1,19 @@
 body {
   margin: 0;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
+  min-height: -webkit-fill-available;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "SunbirdBlack";
+  src: local("SunbirdBlack"),
+    url("./fonts/Hanoded-Sunbird-Black-Regular.ttf") format("truetype");
+  font-weight: normal;
 }
 
 @font-face {

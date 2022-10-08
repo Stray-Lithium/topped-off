@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiPlus } from 'react-icons/fi';
+import appBackground from '../assets/app-background.png';
 
 const NamesScreen = () => {
   const [name, setName] = useState('');
@@ -33,40 +34,38 @@ const NamesScreen = () => {
   };
 
   const playerData = () => {
-    // console.log(players, 'new players');
-    // console.log(Object.values(players));
     return Object.values(players);
   };
   const playersArray = playerData();
 
-  // playerData();
-
   return (
-    <ScreenContainer>
-      <Title>Enter Player Names</Title>
-      <PlayersContainer>
-        <PlayerTitle>Players</PlayerTitle>
-        <PlayersList>
-          {playersArray.map((player) => {
-            return <PlayerName>{player.name}</PlayerName>;
-          })}
-        </PlayersList>
-      </PlayersContainer>
-      <InputContainer>
-        <FiPlus style={styles.plusIcon} onClick={handleSubmit} />
-        <Form onSubmit={handleSubmit}>
-          <Input
-            type='text'
-            value={name}
-            onChange={handleNameChange}
-            placeholder='Enter Name...'
-          />
-        </Form>
-      </InputContainer>
-      <Link to='/ingredients'>
-        <ReadyButton onClick={ready}>Ready!</ReadyButton>
-      </Link>
-    </ScreenContainer>
+    <ScreenBackground>
+      <ScreenContainer>
+        <Title>ENTER PLAYER NAMES</Title>
+        <PlayersContainer>
+          <PlayerTitle>PLAYERS</PlayerTitle>
+          <PlayersList>
+            {playersArray.map((player) => {
+              return <PlayerName>{player.name}</PlayerName>;
+            })}
+          </PlayersList>
+        </PlayersContainer>
+        <InputContainer>
+          <FiPlus style={styles.plusIcon} onClick={handleSubmit} />
+          <Form onSubmit={handleSubmit}>
+            <Input
+              type='text'
+              value={name}
+              onChange={handleNameChange}
+              placeholder='Enter Name...'
+            />
+          </Form>
+        </InputContainer>
+        <Link to='/ingredients'>
+          <ReadyButton onClick={ready}>READY!</ReadyButton>
+        </Link>
+      </ScreenContainer>
+    </ScreenBackground>
   );
 };
 
@@ -84,18 +83,43 @@ const styles = {
   },
 };
 
+const ScreenBackground = styled.div`
+  display: flex;
+  color: black;
+  flex-direction: column;
+  align-items: center;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  background-image: url(${appBackground});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+`;
+
 const ScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  color: white;
-  background-color: #808184;
+  width: 90%;
 `;
 
 const Title = styled.h1`
+  font-family: SunbirdRegular;
+  color: #ee3347;
+  width: 80%;
+  letter-spacing: 5px;
+  text-align: center;
+  font-size: 30px;
   margin-bottom: 40px;
+  text-shadow: 
+  /* first layer at 1px */ -1px -1px 0px #000, 0px -1px 0px #000,
+    1px -1px 0px #000, -1px 0px 0px #000, 1px 0px 0px #000, -1px 1px 0px #000,
+    0px 1px 0px #000, 1px 1px 0px #000,
+    /* second layer at 2px */ -2px -2px 0px #000, -1px -2px 0px #000,
+    0px -2px 0px #000, 1px -2px 0px #000, 2px -2px 0px #000, 2px -1px 0px #000,
+    2px 0px 0px #000, 2px 1px 0px #000, 2px 2px 0px #000, 1px 2px 0px #000,
+    0px 2px 0px #000, -1px 2px 0px #000, -2px 2px 0px #000, -2px 1px 0px #000,
+    -2px 0px 0px #000, -2px -1px 0px #000;
 `;
 
 const PlayersContainer = styled.div`
@@ -108,6 +132,7 @@ const PlayersContainer = styled.div`
 
 const PlayerTitle = styled.h2`
   text-align: center;
+  letter-spacing: 3px;
   width: 50%;
 `;
 
@@ -115,17 +140,24 @@ const PlayersList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
+  padding: 8px;
   width: 50%;
   height: 200px;
-  border-top: solid 2px white;
-  border-bottom: solid 2px white;
+  border-top: solid 2px black;
   overflow-y: auto;
 `;
 
-const PlayerName = styled.h3`
-  font-size: 20px;
+const PlayerName = styled.h2`
+  font-size: 14px;
   margin: 4px;
+  border-radius: 10px;
+  text-align: center;
+  width: 40vw;
+  padding: 6px;
+  letter-spacing: 3px;
+  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: solid 3px black;
 `;
 
 const InputContainer = styled.div`
@@ -145,12 +177,11 @@ const Input = styled.input`
   border-radius: 20px;
   font-size: 20px;
   padding-left: 14px;
-  border: none;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
   color: gray;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+  border: solid 3px black;
     rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.5);
   ::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: rgba(0, 0, 0, 0.5);
@@ -167,14 +198,17 @@ const Input = styled.input`
 `;
 
 const ReadyButton = styled.button`
-  margin-top: 20px;
-  color: white;
   background-color: #ee3347;
-  font-size: 40px;
-  padding: 10px;
-  border-radius: 20px;
+  font-size: 26px;
+  padding: 12px 0px 12px 0px;
+  width: 50vw;
+  letter-spacing: 5px;
+  border-radius: 10px;
+  margin-top: 30px;
   border: solid 3px black;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
+  color: black;
+  margin-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
 

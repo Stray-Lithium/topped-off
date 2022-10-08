@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import yellowCard from '../assets/yellow-card.png';
-import whiteCard from '../assets/white-card.png';
-import redCard from '../assets/red-card.png';
-import blueCard from '../assets/blue-card.png';
-import lemonade from '../assets/lemonade.png';
-import mojito from '../assets/mojito.png';
-import whiskey from '../assets/whiskey.png';
-import martini from '../assets/martini.png';
-import logo from '../assets/topped-logo-red.png';
-import grayCard from '../assets/gray-card.png';
+import lemonadeCard from '../assets/lemonade-card.png';
+import mojitoCard from '../assets/mojito-card.png';
+import whiskeyCard from '../assets/whiskey-card.png';
+import martiniCard from '../assets/martini-card.png';
+import blueBackground from '../assets/martini-background.png';
+import redBackground from '../assets/whiskey-background.png';
+import whiteBackground from '../assets/mojito-background.png';
+import yellowBackground from '../assets/lemonade-background.png';
+import ScoreScreen from './Score';
 
 const IngredientsScreen = () => {
   const [cardSpun, setCardSpun] = useState(false);
@@ -18,29 +17,33 @@ const IngredientsScreen = () => {
   const [cocktailCard, setIngredientCard] = useState('');
   const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
   const [ingredientImageToRender, setIngredientImageToRender] = useState(false);
+  const [scoreScreen, setScoreScreen] = useState(false);
 
   const ingredientRandomizer = () => {
-    console.log('invoked');
     const cards = ['lemonade', 'whiskey', 'martini', 'mojito'];
     const randomWordIndex = Math.floor(Math.random() * cards.length) + 0;
     const card = cards[randomWordIndex];
     if (card === 'whiskey') {
-      setIngredientCardToRender(redCard);
-      setIngredientImageToRender(whiskey);
+      setIngredientCardToRender(redBackground);
+      setIngredientImageToRender(whiskeyCard);
     }
     if (card === 'martini') {
-      setIngredientCardToRender(blueCard);
-      setIngredientImageToRender(martini);
+      setIngredientCardToRender(blueBackground);
+      setIngredientImageToRender(martiniCard);
     }
     if (card === 'mojito') {
-      setIngredientCardToRender(whiteCard);
-      setIngredientImageToRender(mojito);
+      setIngredientCardToRender(whiteBackground);
+      setIngredientImageToRender(mojitoCard);
     }
     if (card === 'lemonade') {
-      setIngredientCardToRender(yellowCard);
-      setIngredientImageToRender(lemonade);
+      setIngredientCardToRender(yellowBackground);
+      setIngredientImageToRender(lemonadeCard);
     }
     setIngredientCard(card);
+  };
+
+  const flipCard = () => {
+    setCardSpun(true);
   };
 
   useEffect(() => {
@@ -53,64 +56,60 @@ const IngredientsScreen = () => {
     }
   }, [names]);
 
-  const flipCard = () => {
+  const storeCurrentCard = () => {
+    localStorage.setItem('currentCard', JSON.stringify(`${cocktailCard}Score`));
     const lengthOfNames = Object.values(names).length;
     const randomNameIndex = Math.floor(Math.random() * lengthOfNames) + 0;
     const name = Object.keys(names)[randomNameIndex];
     localStorage.setItem('currentName', JSON.stringify(`${name}`));
-    setCardSpun(true);
   };
 
-  const storeCurrentCard = () => {
-    localStorage.setItem('currentCard', JSON.stringify(`${cocktailCard}Score`));
-  };
-
-  return (
-    <ScreenBackground>
-      <ScreenContainer>
-        <Title>Choose Ingredient</Title>
-        {cardSpun ? (
-          ingredientCardToRender && ingredientImageToRender ? (
-            <BackOfCardContainer>
-              <BackOfCard src={ingredientCardToRender} />
-              <Logo src={ingredientImageToRender} />
-            </BackOfCardContainer>
-          ) : (
-            <></>
-          )
+  if (ingredientCardToRender) {
+    return (
+      <ScreenBackground
+        style={{ backgroundImage: `url(${ingredientCardToRender})` }}
+      >
+        <ScoreButton onClick={() => setScoreScreen(true)}>Score</ScoreButton>
+        {scoreScreen ? (
+          <ScoreButton onClick={() => setScoreScreen(false)}>Close</ScoreButton>
         ) : (
-          <BackOfCardContainer>
-            <BackOfCard src={grayCard} />
-            <Logo src={logo} />
-          </BackOfCardContainer>
+          <></>
         )}
-        {cardSpun ? (
-          <Link
-            to={{
-              pathname: `/challenge/${cocktailCard}`,
-            }}
-          >
-            <FlipCardButton onClick={() => storeCurrentCard()}>
-              Continue!
-            </FlipCardButton>
-          </Link>
+        {scoreScreen ? (
+          <ScoreScreen names={names} />
         ) : (
-          <FlipCardButton onClick={() => flipCard()}>Flip card!</FlipCardButton>
+          <ScreenContainer>
+            {ingredientCardToRender && ingredientImageToRender ? (
+              <Link
+                to={{
+                  pathname: `/challenge/${cocktailCard}`,
+                }}
+              >
+                <BackOfCardContainer onClick={() => storeCurrentCard()}>
+                  <BackOfCard src={ingredientImageToRender} />
+                </BackOfCardContainer>
+              </Link>
+            ) : (
+              <></>
+            )}
+          </ScreenContainer>
         )}
-      </ScreenContainer>
-    </ScreenBackground>
-  );
-  // }
+      </ScreenBackground>
+    );
+  }
 };
 
 const ScreenBackground = styled.div`
   display: flex;
-  color: white;
+  color: black;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  background-color: #6d6e70;
+  justify-content: center;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 `;
 
 const ScreenContainer = styled.div`
@@ -118,48 +117,6 @@ const ScreenContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 90%;
-`;
-
-const Title = styled.h1`
-  margin-bottom: 60px;
-`;
-
-const IngredientsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const HalfCocktails = styled.div`
-  position: relative;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-`;
-
-const CardContainer = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
-const Card = styled.img`
-  opacity: 60%;
-  margin-bottom: 40px;
-  width: 40vw;
-  filter: drop-shadow(2px 5px 0px #222);
-`;
-
-const Ingredient = styled.img`
-  position: absolute;
-  margin-bottom: 40px;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 20vw;
 `;
 
 const BackOfCardContainer = styled.div`
@@ -170,80 +127,22 @@ const BackOfCardContainer = styled.div`
 `;
 
 const BackOfCard = styled.img`
-  opacity: 60%;
   width: 70vw;
-  filter: drop-shadow(2px 5px 0px #222);
 `;
 
-const Logo = styled.img`
+const ScoreButton = styled.button`
   position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 40vw;
-`;
-
-const FlipCardButton = styled.button`
-  margin-top: 40px;
-  color: white;
+  left: 10px;
+  top: 10px;
+  width: 100px;
   background-color: #ee3347;
-  font-size: 40px;
-  padding: 10px;
-  border-radius: 20px;
+  font-size: 16px;
+  border-radius: 10px;
   border: solid 3px black;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
+  color: black;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+  z-index: 1;
 `;
 
 export default IngredientsScreen;
-
-{
-  /* <IngredientsContainer>
-          <HalfCocktails>
-            <Link
-              to={{
-                pathname: `/challenge/lemonade`,
-              }}
-            >
-              <CardContainer>
-                <Card src={yellowCard} />
-                <Ingredient src={lemonade} />
-              </CardContainer>
-            </Link>
-            <Link
-              to={{
-                pathname: `/challenge/whiskey`,
-              }}
-            >
-              <CardContainer>
-                <Card src={redCard} />
-                <Ingredient src={whiskey} />
-              </CardContainer>
-            </Link>
-          </HalfCocktails>
-          <HalfCocktails>
-            <Link
-              to={{
-                pathname: `/challenge/martini`,
-              }}
-            >
-              <CardContainer>
-                <Card src={blueCard} />
-                <Ingredient src={martini} />
-              </CardContainer>
-            </Link>
-            <Link
-              to={{
-                pathname: `/challenge/mojito`,
-              }}
-            >
-              <CardContainer>
-                <Card src={whiteCard} />
-                <Ingredient src={mojito} />
-              </CardContainer>
-            </Link>
-          </HalfCocktails>
-        </IngredientsContainer> */
-}
