@@ -17,8 +17,10 @@ const NamesScreen = () => {
     let playerObject = {};
     playerObject[name.toUpperCase()] = {
       name: name.toUpperCase(),
-      score: 0,
-      checked: false,
+      lemonadeScore: 0,
+      whiskeyScore: 0,
+      martiniScore: 0,
+      mojitoScore: 0,
     };
     console.log(playerObject, 'obj');
     setPlayers({ ...players, ...playerObject });

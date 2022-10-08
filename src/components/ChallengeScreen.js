@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { lemonBlanks, lemonPrompts } from '../blanks/lemon';
+import { lemonPrompts } from '../blanks/lemon';
 import { iceBlank } from '../blanks/ice';
 import { oliveBlank } from '../blanks/olive';
-import { mojitoBlanks } from '../blanks/mojito';
 import { martiniCard } from '../cards/martini';
 import { whiskeyCard } from '../cards/whiskey';
 import { mojitoCard } from '../cards/mojito';
@@ -14,14 +13,25 @@ import { lemonadeCard } from '../cards/lemonade';
 const ChallengeScreen = () => {
   const { ingredient } = useParams();
   const [names, setNames] = useState([]);
+  const [currentName, setCurrentName] = useState('');
+  const [currentCard, setCurrentCard] = useState('');
   const [lemonPlayers, setLemonPlayers] = useState([]);
+  const [scoreUpdate, setScoreUpdate] = useState(false);
+
+  useEffect(() => {
+    const name = JSON.parse(localStorage.getItem('currentName'));
+    setCurrentName(name);
+  }, []);
+
+  useEffect(() => {
+    const card = JSON.parse(localStorage.getItem('currentCard'));
+    setCurrentCard(card);
+  }, []);
 
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('names'));
-    if (items && names.length === 0) {
-      setNames(items);
-    }
-  }, [names]);
+    setNames(items);
+  }, [scoreUpdate]);
 
   const nameArray = () => {
     const newArray = [];
@@ -32,31 +42,16 @@ const ChallengeScreen = () => {
   };
   const checkboxNames = nameArray();
 
-  const currentName = () => {
-    const lengthOfNames = Object.values(names).length;
-    const randomNameIndex = Math.floor(Math.random() * lengthOfNames) + 0;
-    const name = Object.keys(names)[randomNameIndex];
-    return name;
-  };
-
   const blankWord = () => {
-    // let blankData = lemonBlanks;
     if (ingredient === 'whiskey') {
-      // const ice = iceBlank();
-      // const whiskey = whiskeyCard(ice);
       return whiskeyCard(iceBlank());
     }
     if (ingredient === 'martini') {
-      // const olive = oliveBlank();
-      // const martini = martiniCard(olive);
       return martiniCard(oliveBlank());
     }
     if (ingredient === 'mojito') {
-      // const mojito = mojitoCard();
       return mojitoCard();
     }
-    // const randomWordIndex = Math.floor(Math.random() * blankData.length) + 0;
-    // const challenge = blankData[randomWordIndex];
     return lemonadeCard();
   };
 
@@ -71,13 +66,21 @@ const ChallengeScreen = () => {
     }
   };
 
-  const confirm = () => {
+  const confirmLemonade = () => {
     localStorage.setItem('lemonNames', JSON.stringify(lemonPlayers));
   };
 
-  if (Object.values(names).length) {
+  const complete = () => {
+    const namesCopy = names;
+    console.log(namesCopy[currentName][currentCard], 'example');
+    namesCopy[currentName][currentCard] += 1;
+    localStorage.setItem('names', JSON.stringify(namesCopy));
+    setScoreUpdate(true);
+  };
+
+  const chellenges = () => {
     return (
-      <ScreenBackground>
+      <BlankBackground>
         {ingredient === 'lemonade' ? (
           <ScreenContainer>
             <Title>{lemonPrompts[0]}?</Title>
@@ -109,17 +112,65 @@ const ChallengeScreen = () => {
                 pathname: `/lemonade-challenge`,
               }}
             >
-              <ConfirmButton onClick={() => confirm()}>Confirm</ConfirmButton>
+              <ConfirmButton onClick={() => confirmLemonade()}>
+                Confirm
+              </ConfirmButton>
             </Link>
-            {/* <BlankWord>{lemonadeCard(blankWord())}</BlankWord> */}
           </ScreenContainer>
         ) : (
           <ScreenContainer>
-            {/* <Title>This challenge is for</Title>
-            <Name>{`${currentName()}!`}</Name> */}
-            <BlankWord>{`${currentName()}! ${blankWord()}`}</BlankWord>
-            <ChallengeComplete>Complete!</ChallengeComplete>
+            <BlankWord>{`${currentName}! ${blankWord()}`}</BlankWord>
+            <ChallengeComplete
+              onClick={() => {
+                complete();
+              }}
+            >
+              Complete!
+            </ChallengeComplete>
             <Drink>Drink!</Drink>
+          </ScreenContainer>
+        )}
+      </BlankBackground>
+    );
+  };
+
+  const score = Object.values(names);
+
+  if (Object.values(names).length && currentName !== '') {
+    return (
+      <ScreenBackground>
+        {!scoreUpdate ? (
+          chellenges()
+        ) : (
+          <ScreenContainer>
+            <Title>Scoreboard</Title>
+            <CheckboxContainer>
+              <Names>
+                {score.map((player) => {
+                  return (
+                    <CheckboxSpacing>
+                      <CheckboxName>{player.name}</CheckboxName>
+                    </CheckboxSpacing>
+                  );
+                })}
+              </Names>
+              <Checkboxes>
+                {score.map((player) => {
+                  return (
+                    <CheckboxSpacing>
+                      <CheckboxName>{player[currentCard]}</CheckboxName>
+                    </CheckboxSpacing>
+                  );
+                })}
+              </Checkboxes>
+            </CheckboxContainer>
+            <Link
+              to={{
+                pathname: `/ingredients`,
+              }}
+            >
+              <ConfirmButton>Confirm</ConfirmButton>
+            </Link>
           </ScreenContainer>
         )}
       </ScreenBackground>
@@ -128,6 +179,7 @@ const ChallengeScreen = () => {
 };
 
 const ScreenBackground = styled.div`
+  position: relative;
   color: white;
   display: flex;
   flex-direction: column;
@@ -135,6 +187,14 @@ const ScreenBackground = styled.div`
   height: 100vh;
   width: 100%;
   background-color: #808184;
+`;
+
+const BlankBackground = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 `;
 
 const ScreenContainer = styled.div`

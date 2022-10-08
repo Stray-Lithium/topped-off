@@ -47,7 +47,7 @@ const LemonadeChallenge = () => {
   const confirm = () => {
     const namesCopy = names;
     completedNames.forEach((name) => {
-      namesCopy[name].score += 1;
+      namesCopy[name].lemonadeScore += 1;
     });
     localStorage.setItem('names', JSON.stringify(namesCopy));
     setScoreUpdate(true);
@@ -56,9 +56,18 @@ const LemonadeChallenge = () => {
   const score = Object.values(names);
 
   const drinkScreen = () => {
-    return lemonNames.length !== completedNames.length
-      ? 'drink'
-      : 'ingredients';
+    if (lemonNames.length !== completedNames.length) {
+      let drinkers = [];
+      lemonNames.forEach((player) => {
+        if (!completedNames.includes(player)) {
+          drinkers.push(player);
+        }
+      });
+      localStorage.setItem('drinkers', JSON.stringify(drinkers));
+      return 'drink';
+    } else {
+      return 'ingredients';
+    }
   };
 
   if (lemonNames.length && challenge) {
@@ -112,7 +121,7 @@ const LemonadeChallenge = () => {
                 {score.map((player) => {
                   return (
                     <CheckboxSpacing>
-                      <CheckboxName>{player.score}</CheckboxName>
+                      <CheckboxName>{player.lemonadeScore}</CheckboxName>
                     </CheckboxSpacing>
                   );
                 })}
