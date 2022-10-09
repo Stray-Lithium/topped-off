@@ -60,6 +60,15 @@ const LemonadeChallenge = () => {
 
   const score = Object.values(names);
 
+  const scoreNamesArray = () => {
+    const newArray = [];
+    Object.values(names).forEach((player) => {
+      newArray.push(player);
+    });
+    return newArray;
+  };
+  const scoreNameArray = scoreNamesArray();
+
   const drinkScreen = () => {
     if (lemonNames.length !== completedNames.length) {
       let drinkers = [];
@@ -75,7 +84,7 @@ const LemonadeChallenge = () => {
     }
   };
 
-  if (lemonNames.length && challenge) {
+  if (lemonNames.length && challenge && scoreNameArray) {
     return (
       <ScreenBackground>
         {!scoreUpdate ? (
@@ -124,27 +133,32 @@ const LemonadeChallenge = () => {
           )
         ) : (
           <ScreenContainer>
-            <Title>Scoreboard</Title>
-            <CheckboxContainer>
-              <Names>
-                {score.map((player) => {
-                  return (
-                    <CheckboxSpacing>
-                      <CheckboxName>{player.name}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Names>
-              <Checkboxes>
-                {score.map((player) => {
-                  return (
-                    <CheckboxSpacing>
-                      <CheckboxName>{player.lemonadeScore}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Checkboxes>
-            </CheckboxContainer>
+            <ScoreboardContainer>
+              <Title>SCOREBOARD</Title>
+              {scoreNameArray.map((player) => {
+                return (
+                  <EachPersonsScoreContainer>
+                    <IconsContainer>
+                      <IconDiv>
+                        <Score>{player.whiskeyScore}</Score>
+                      </IconDiv>
+                      <IconDiv>
+                        <Score>{player.lemonadeScore}</Score>
+                      </IconDiv>
+                      <IconDiv>
+                        <Score>{player.martiniScore}</Score>
+                      </IconDiv>
+                      <IconDiv>
+                        <Score>{player.mojitoScore}</Score>
+                      </IconDiv>
+                    </IconsContainer>
+                    <ScoreNameContainer>
+                      <ScoreName>{player.name}</ScoreName>
+                    </ScoreNameContainer>
+                  </EachPersonsScoreContainer>
+                );
+              })}
+            </ScoreboardContainer>
             <Link
               to={{
                 pathname: `/${drinkScreen()}`,
@@ -281,11 +295,53 @@ const ConfirmButton = styled.button`
   padding: 12px 0px 12px 0px;
   letter-spacing: 3px;
   margin-top: 20px;
+  margin-bottom: 40px;
   width: 44vw;
   border-radius: 10px;
   border: solid 3px black;
   font-family: SunbirdBlack;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+`;
+
+const ScoreboardContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+const EachPersonsScoreContainer = styled.div`
+  width: 100%;
+`;
+
+const IconsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  justify-content: space-evenly;
+  width: 100%;
+  height: ;
+`;
+
+const IconDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ScoreNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ScoreName = styled.p`
+  font-size: 20px;
+`;
+
+const Score = styled.h1`
+  margin: 0px;
 `;
 
 export default LemonadeChallenge;

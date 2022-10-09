@@ -39,20 +39,20 @@ const DrinkScreen = () => {
           <DrinkCountContainer>
             {reveal ? (
               <DrinkNumberContainer>
-                <DrinkNumber>{drinkNumber}</DrinkNumber>
+                <NumberContainer>
+                  <DrinkNumber>{drinkNumber}</DrinkNumber>
+                </NumberContainer>
                 <Link
                   to={{
                     pathname: `/ingredients`,
                   }}
                 >
-                  <NextRoundButton>Next Round!</NextRoundButton>
+                  <NextRoundButton>NEXT ROUND</NextRoundButton>
                 </Link>
               </DrinkNumberContainer>
             ) : (
-              <DrinkCountCover>
-                <RevealText onClick={() => revealClick()}>
-                  Tap to reveal!
-                </RevealText>
+              <DrinkCountCover onClick={() => revealClick()}>
+                <RevealText>?</RevealText>
               </DrinkCountCover>
             )}
           </DrinkCountContainer>
@@ -94,12 +94,19 @@ height 240px;
 `;
 
 const DrinkCountCover = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 200px;
   width: 120px;
-  background-color: black;
+  background-color: #ee3347;
+  border: 3px solid black;
+  border-radius: 10px;
 `;
 
-const RevealText = styled.h4``;
+const RevealText = styled.h1`
+  font-size: 200px;
+`;
 
 const DrinkNumberContainer = styled.div`
   display: flex;
@@ -108,17 +115,28 @@ const DrinkNumberContainer = styled.div`
   justify-content: center;
 `;
 
-const DrinkNumber = styled.h1``;
+const NumberContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+`;
+
+const DrinkNumber = styled.p`
+  font-size: 100px;
+`;
 
 const NextRoundButton = styled.button`
-  margin-top: 40px;
-  color: white;
+  color: black;
   background-color: #ee3347;
-  font-size: 40px;
-  padding: 10px;
-  border-radius: 20px;
+  font-size: 22px;
+  padding: 12px 0px 12px 0px;
+  letter-spacing: 3px;
+  width: 60vw;
+  border-radius: 10px;
   border: solid 3px black;
-  font-family: SunbirdRegular;
+  font-family: SunbirdBlack;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
 

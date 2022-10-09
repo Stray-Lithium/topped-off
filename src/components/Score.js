@@ -47,7 +47,8 @@ const Title = styled.h1`
   letter-spacing: 2px;
   text-align: center;
   font-size: 26px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top: 30px;
   width: 80%;
 `;
 
@@ -57,6 +58,7 @@ const ScoreboardContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-top: 30px;
 `;
 
 const EachPersonsScoreContainer = styled.div`
@@ -85,6 +87,8 @@ const ScoreNameContainer = styled.div`
 `;
 
 const ScoreName = styled.p`
+  // margin: 0px;
+  // margin-bottom: 20px;
   font-size: 20px;
 `;
 

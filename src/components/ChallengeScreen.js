@@ -487,6 +487,7 @@ const ConfirmButton = styled.button`
   padding: 12px 0px 12px 0px;
   letter-spacing: 3px;
   margin-top: 20px;
+  margin-bottom: 40px;
   width: 44vw;
   border-radius: 10px;
   border: solid 3px black;
