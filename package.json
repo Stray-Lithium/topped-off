@@ -1,8 +1,8 @@
 {
   "name": "topped_off",
   "version": "0.1.0",
-  "homepage": "https://Stray-Lithium.github.io/",
-  "private": true,
+  "homepage": "https://Stray-Lithium.github.io/topped-off",
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
