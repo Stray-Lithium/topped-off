@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import appBackground from './assets/app-background.png';
 import StartScreen from './components/StartScreen';
@@ -14,8 +14,6 @@ import DrinkScreen from './components/DrinkScreen';
 function App() {
   return (
     <ScreenBackground>
-      {/* <StartScreen /> */}
-      {/* <Router> */}
       <Routes>
         <Route path='/' element={<StartScreen />}></Route>
         <Route exact path='/names' element={<NamesScreen />}></Route>
@@ -37,7 +35,6 @@ function App() {
         ></Route>
         <Route exact path='/drink' element={<DrinkScreen />}></Route>
       </Routes>
-      {/* </Router> */}
     </ScreenBackground>
   );
 }

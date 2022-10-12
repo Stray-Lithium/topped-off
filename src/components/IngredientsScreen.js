@@ -12,7 +12,6 @@ import yellowBackground from '../assets/lemonade-background.png';
 import ScoreScreen from './Score';
 
 const IngredientsScreen = () => {
-  const [cardSpun, setCardSpun] = useState(false);
   const [names, setNames] = useState([]);
   const [cocktailCard, setIngredientCard] = useState('');
   const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
@@ -40,10 +39,6 @@ const IngredientsScreen = () => {
       setIngredientImageToRender(lemonadeCard);
     }
     setIngredientCard(card);
-  };
-
-  const flipCard = () => {
-    setCardSpun(true);
   };
 
   useEffect(() => {

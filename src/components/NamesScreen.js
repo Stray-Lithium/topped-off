@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiPlus } from 'react-icons/fi';
-import appBackground from '../assets/app-background.png';
 
 const NamesScreen = () => {
   const [name, setName] = useState('');
@@ -39,33 +38,31 @@ const NamesScreen = () => {
   const playersArray = playerData();
 
   return (
-    <ScreenBackground>
-      <ScreenContainer>
-        <Title>ENTER PLAYER NAMES</Title>
-        <PlayersContainer>
-          <PlayerTitle>PLAYERS</PlayerTitle>
-          <PlayersList>
-            {playersArray.map((player) => {
-              return <PlayerName>{player.name}</PlayerName>;
-            })}
-          </PlayersList>
-        </PlayersContainer>
-        <InputContainer>
-          <FiPlus style={styles.plusIcon} onClick={handleSubmit} />
-          <Form onSubmit={handleSubmit}>
-            <Input
-              type='text'
-              value={name}
-              onChange={handleNameChange}
-              placeholder='Enter Name...'
-            />
-          </Form>
-        </InputContainer>
-        <Link to='/ingredients'>
-          <ReadyButton onClick={ready}>READY!</ReadyButton>
-        </Link>
-      </ScreenContainer>
-    </ScreenBackground>
+    <ScreenContainer>
+      <Title>ENTER PLAYER NAMES</Title>
+      <PlayersContainer>
+        <PlayerTitle>PLAYERS</PlayerTitle>
+        <PlayersList>
+          {playersArray.map((player) => {
+            return <PlayerName>{player.name}</PlayerName>;
+          })}
+        </PlayersList>
+      </PlayersContainer>
+      <InputContainer>
+        <FiPlus style={styles.plusIcon} onClick={handleSubmit} />
+        <Form onSubmit={handleSubmit}>
+          <Input
+            type='text'
+            value={name}
+            onChange={handleNameChange}
+            placeholder='Enter Name...'
+          />
+        </Form>
+      </InputContainer>
+      <Link to='/ingredients'>
+        <ReadyButton onClick={ready}>READY!</ReadyButton>
+      </Link>
+    </ScreenContainer>
   );
 };
 
@@ -83,24 +80,13 @@ const styles = {
   },
 };
 
-const ScreenBackground = styled.div`
-  display: flex;
-  color: black;
-  flex-direction: column;
-  align-items: center;
-  min-height: -webkit-fill-available;
-  width: 100vw;
-  background-image: url(${appBackground});
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-`;
-
 const ScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 90%;
+  height: 100%;
 `;
 
 const Title = styled.h1`

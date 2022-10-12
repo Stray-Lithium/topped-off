@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/topped-logo-red.png';
-import appBackground from '../assets/app-background.png';
 
 const StartScreen = () => {
   const [start, setStart] = useState(false);
@@ -45,26 +44,12 @@ const styles = {
   },
 };
 
-const ScreenBackground = styled.div`
-  display: flex;
-  color: black;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: -webkit-fill-available;
-  width: 100vw;
-  background-image: url(${appBackground});
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  padding-bottom: env(safe-area-inset-bottom);
-`;
-
 const ScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
+  justify-content: center;
+  height: 100%;
 `;
 
 const Logo = styled.img`
