@@ -17,27 +17,25 @@ const StartScreen = () => {
   };
 
   return (
-    <ScreenBackground>
-      <ScreenContainer>
-        <Logo src={logo} />
-        <Link to='/names'>
-          <StartGame
-            onClick={() => startClicked()}
-            style={start ? styles.shadow : {}}
-          >
-            PLAY
-          </StartGame>
-        </Link>
-        <Link to='/rules'>
-          <Rules
-            onClick={() => rulesClicked()}
-            style={rules ? styles.shadow : {}}
-          >
-            RULES
-          </Rules>
-        </Link>
-      </ScreenContainer>
-    </ScreenBackground>
+    <ScreenContainer>
+      <Logo src={logo} />
+      <Link to='/names'>
+        <StartGame
+          onClick={() => startClicked()}
+          style={start ? styles.shadow : {}}
+        >
+          PLAY
+        </StartGame>
+      </Link>
+      <Link to='/rules'>
+        <Rules
+          onClick={() => rulesClicked()}
+          style={rules ? styles.shadow : {}}
+        >
+          RULES
+        </Rules>
+      </Link>
+    </ScreenContainer>
   );
 };
 

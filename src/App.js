@@ -1,6 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import appBackground from './assets/app-background.png';
 import StartScreen from './components/StartScreen';
 import NamesScreen from './components/NamesScreen';
 import IngredientsScreen from './components/IngredientsScreen';
@@ -11,8 +13,10 @@ import DrinkScreen from './components/DrinkScreen';
 
 function App() {
   return (
-    <Router>
-      <Routes>
+    <ScreenBackground>
+      <StartScreen />
+      {/* <Router> */}
+      {/* <Routes>
         <Route path='/' element={<StartScreen />}></Route>
         <Route exact path='/names' element={<NamesScreen />}></Route>
         <Route
@@ -32,9 +36,24 @@ function App() {
           element={<LemonadeChallenge />}
         ></Route>
         <Route exact path='/drink' element={<DrinkScreen />}></Route>
-      </Routes>
-    </Router>
+      </Routes> */}
+      {/* </Router> */}
+    </ScreenBackground>
   );
 }
+
+const ScreenBackground = styled.div`
+  display: flex;
+  color: black;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  min-height: -webkit-fill-available;
+  width: 100vw;
+  background-image: url(${appBackground});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+`;
 
 export default App;
