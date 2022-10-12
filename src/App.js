@@ -14,9 +14,9 @@ import DrinkScreen from './components/DrinkScreen';
 function App() {
   return (
     <ScreenBackground>
-      <StartScreen />
+      {/* <StartScreen /> */}
       {/* <Router> */}
-      {/* <Routes>
+      <Routes>
         <Route path='/' element={<StartScreen />}></Route>
         <Route exact path='/names' element={<NamesScreen />}></Route>
         <Route
@@ -36,7 +36,7 @@ function App() {
           element={<LemonadeChallenge />}
         ></Route>
         <Route exact path='/drink' element={<DrinkScreen />}></Route>
-      </Routes> */}
+      </Routes>
       {/* </Router> */}
     </ScreenBackground>
   );
