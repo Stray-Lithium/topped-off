@@ -9,14 +9,15 @@ import blueBackground from '../assets/martini-background.png';
 import redBackground from '../assets/whiskey-background.png';
 import whiteBackground from '../assets/mojito-background.png';
 import yellowBackground from '../assets/lemonade-background.png';
-import ScoreScreen from './Score';
+import { useDispatch } from 'react-redux';
+import { scoreBoardRequest } from '../actions/scoreboard';
 
 const IngredientsScreen = () => {
+  const dispatch = useDispatch();
   const [names, setNames] = useState([]);
   const [cocktailCard, setIngredientCard] = useState('');
   const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
   const [ingredientImageToRender, setIngredientImageToRender] = useState(false);
-  const [scoreScreen, setScoreScreen] = useState(false);
 
   const ingredientRandomizer = () => {
     const cards = ['lemonade', 'whiskey', 'martini', 'mojito'];
@@ -64,31 +65,28 @@ const IngredientsScreen = () => {
       <ScreenBackground
         style={{ backgroundImage: `url(${ingredientCardToRender})` }}
       >
-        <ScoreButton onClick={() => setScoreScreen(true)}>Score</ScoreButton>
-        {scoreScreen ? (
-          <ScoreButton onClick={() => setScoreScreen(false)}>Close</ScoreButton>
-        ) : (
-          <></>
-        )}
-        {scoreScreen ? (
-          <ScoreScreen names={names} />
-        ) : (
-          <ScreenContainer>
-            {ingredientCardToRender && ingredientImageToRender ? (
-              <Link
-                to={{
-                  pathname: `/challenge/${cocktailCard}`,
-                }}
-              >
-                <BackOfCardContainer onClick={() => storeCurrentCard()}>
-                  <BackOfCard src={ingredientImageToRender} />
-                </BackOfCardContainer>
-              </Link>
-            ) : (
-              <></>
-            )}
-          </ScreenContainer>
-        )}
+        <ScoreButton onClick={() => dispatch(scoreBoardRequest(true))}>
+          Score
+        </ScoreButton>
+        <ScreenContainer>
+          {ingredientCardToRender && ingredientImageToRender ? (
+            <Link
+              to={{
+                pathname: `${
+                  cocktailCard === 'lemonade'
+                    ? '/lemonade-screen'
+                    : `/challenge/${cocktailCard}`
+                }`,
+              }}
+            >
+              <BackOfCardContainer onClick={() => storeCurrentCard()}>
+                <BackOfCard src={ingredientImageToRender} />
+              </BackOfCardContainer>
+            </Link>
+          ) : (
+            <></>
+          )}
+        </ScreenContainer>
       </ScreenBackground>
     );
   }
@@ -130,8 +128,9 @@ const ScoreButton = styled.button`
   left: 10px;
   top: 10px;
   width: 100px;
-  background-color: #ee3347;
-  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.5);
+  // background-color: #ee3347;
+  font-size: 20px;
   border-radius: 10px;
   border: solid 3px black;
   font-family: SunbirdBlack;

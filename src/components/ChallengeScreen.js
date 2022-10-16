@@ -1,29 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import appBackground from '../assets/app-background.png';
-import { lemonBlankFill } from '../blanks/lemon';
 import { iceBlank } from '../blanks/ice';
 import { oliveBlank } from '../blanks/olive';
 import { martiniCard } from '../cards/martini';
 import { whiskeyCard } from '../cards/whiskey';
 import { mojitoCard } from '../cards/mojito';
-import { lemonadeCard } from '../cards/lemonade';
 import redCard from '../assets/red-card.png';
 import whiteCard from '../assets/white-card.png';
 import blueCard from '../assets/blue-card.png';
-import yellowCard from '../assets/yellow-card.png';
+import LemonadeChallenge from './LemonadeScreen';
+import { scoreBoardRequest } from '../actions/scoreboard';
 
 const ChallengeScreen = () => {
+  const dispatch = useDispatch();
   const { ingredient } = useParams();
-  const [names, setNames] = useState([]);
+  const [names, setNames] = useState(false);
   const [currentName, setCurrentName] = useState(false);
-  const [currentCard, setCurrentCard] = useState('');
-  const [lemonPlayers, setLemonPlayers] = useState([]);
-  const [lemonFill, setLemonFill] = useState(false);
-  const [scoreUpdate, setScoreUpdate] = useState(false);
+  const [currentCard, setCurrentCard] = useState(false);
+  const [cardContent, setCardContent] = useState(false);
   const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
+  const [counter, setCounter] = useState(false);
+  const [startTimer, setStartTimer] = useState(false);
 
   const ingredientRandomizer = () => {
     if (currentCard === 'whiskeyScore') {
@@ -35,11 +36,27 @@ const ChallengeScreen = () => {
     if (currentCard === 'mojitoScore') {
       setIngredientCardToRender(whiteCard);
     }
-    if (currentCard === 'lemonadeScore') {
-      setIngredientCardToRender(yellowCard);
-    }
-    // setIngredientCard(card);
   };
+
+  const blankWord = () => {
+    if (ingredient === 'whiskey') {
+      setCardContent(whiskeyCard(iceBlank()));
+    }
+    if (ingredient === 'martini') {
+      setCardContent(martiniCard(oliveBlank()));
+    }
+    if (ingredient === 'mojito') {
+      setCardContent(mojitoCard());
+    }
+  };
+
+  useEffect(() => {
+    if (counter && startTimer) {
+      const timer =
+        counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+      return () => clearInterval(timer);
+    }
+  }, [counter, startTimer]);
 
   useEffect(() => {
     if (!ingredientCardToRender) {
@@ -49,84 +66,37 @@ const ChallengeScreen = () => {
 
   useEffect(() => {
     if (!currentName) {
-      const asyncCurrentName = async () => {
-        const name = await JSON.parse(localStorage.getItem('currentName'));
-        console.log(name);
-        setCurrentName(name);
-      };
-      asyncCurrentName();
+      const name = JSON.parse(localStorage.getItem('currentName'));
+      setCurrentName(name);
     }
   }, [currentName]);
 
   useEffect(() => {
-    const card = JSON.parse(localStorage.getItem('currentCard'));
-    console.log(card);
-    setCurrentCard(card);
-  }, []);
-
-  useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('names'));
-    setNames(items);
-  }, [scoreUpdate]);
-
-  useEffect(() => {
-    if (!lemonFill) {
-      setLemonFill(lemonBlankFill().toUpperCase());
+    if (!currentCard) {
+      const card = JSON.parse(localStorage.getItem('currentCard'));
+      setCurrentCard(card);
     }
   }, [currentCard]);
 
-  const nameArray = () => {
-    const newArray = [];
-    Object.keys(names).forEach((name) => {
-      newArray.push({ name });
-    });
-    return newArray;
-  };
-  const checkboxNames = nameArray();
-
-  const scoreNamesArray = () => {
-    const newArray = [];
-    Object.values(names).forEach((player) => {
-      newArray.push(player);
-    });
-    return newArray;
-  };
-  const scoreNameArray = scoreNamesArray();
-
-  const blankWord = () => {
-    if (ingredient === 'whiskey') {
-      return whiskeyCard(iceBlank());
+  useEffect(() => {
+    if (!names) {
+      const items = JSON.parse(localStorage.getItem('names'));
+      setNames(items);
     }
-    if (ingredient === 'martini') {
-      return martiniCard(oliveBlank());
-    }
-    if (ingredient === 'mojito') {
-      return mojitoCard();
-    }
-    return lemonadeCard();
-  };
+  }, [names]);
 
-  const checkboxClick = (e, checkName) => {
-    const addToCheck = e.target.checked;
-    if (addToCheck) {
-      setLemonPlayers([...lemonPlayers, checkName]);
-    } else {
-      let filter = lemonPlayers.filter((player) => player !== checkName);
-      setLemonPlayers(filter);
-      console.log(filter, 'filter');
+  useEffect(() => {
+    if (!cardContent) {
+      blankWord();
     }
-  };
-
-  const confirmLemonade = () => {
-    localStorage.setItem('lemonNames', JSON.stringify(lemonPlayers));
-  };
+    setCounter(cardContent.timer);
+  }, [cardContent]);
 
   const complete = () => {
     const namesCopy = names;
-    console.log(namesCopy[currentName][currentCard], 'example');
     namesCopy[currentName][currentCard] += 1;
     localStorage.setItem('names', JSON.stringify(namesCopy));
-    setScoreUpdate(true);
+    dispatch(scoreBoardRequest(true));
   };
 
   const drinkScreen = () => {
@@ -134,140 +104,58 @@ const ChallengeScreen = () => {
     return 'drink';
   };
 
-  const chellenges = () => {
+  const challenges = () => {
     return (
       <BlankBackground>
         {ingredient === 'lemonade' ? (
-          <ScreenContainer>
-            <Title>{lemonFill}?</Title>
-            <CheckboxContainer>
-              <Names>
-                {checkboxNames.map((name) => {
-                  return (
-                    <CheckboxSpacing>
-                      <CheckboxName>{name.name}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Names>
-              <Checkboxes>
-                {checkboxNames.map((name) => {
-                  return (
-                    <CheckboxSpacing>
-                      <Checkbox
-                        type='checkbox'
-                        onClick={(e) => checkboxClick(e, name.name)}
-                      />
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Checkboxes>
-            </CheckboxContainer>
-            <Link
-              to={{
-                pathname: `/lemonade-challenge`,
-              }}
-            >
-              <ConfirmButton onClick={() => confirmLemonade()}>
-                CONFIRM
-              </ConfirmButton>
-            </Link>
-          </ScreenContainer>
+          <LemonadeChallenge />
         ) : (
           <ScreenContainer>
+            <Counter>{counter}</Counter>
             <BackOfCardContainer>
               <BackOfCard src={ingredientCardToRender} />
               <CardContentContainer>
-                <CardContent>{`${currentName}! ${blankWord()}`}</CardContent>
+                <CardTitle>{cardContent.title}</CardTitle>
+                <CardContent>{`${currentName}! ${cardContent.content}`}</CardContent>
+                <CardComment>{cardContent.comment}</CardComment>
               </CardContentContainer>
             </BackOfCardContainer>
-            <ChallengeComplete
-              onClick={() => {
-                complete();
-              }}
-            >
-              COMPLETE
-            </ChallengeComplete>
-            <Link
-              to={{
-                pathname: `/${drinkScreen()}`,
-              }}
-            >
-              <Drink>DRINK</Drink>
-            </Link>
+            <CompleteDrinkContainer>
+              {cardContent.timer && counter > 0 ? (
+                <TimerButton onClick={() => setStartTimer(true)}>
+                  START TIMER
+                </TimerButton>
+              ) : (
+                <Link
+                  to={{
+                    pathname: `/ingredients`,
+                  }}
+                >
+                  <ChallengeComplete
+                    onClick={() => {
+                      complete();
+                    }}
+                  >
+                    COMPLETE
+                  </ChallengeComplete>
+                </Link>
+              )}
+              <Link
+                to={{
+                  pathname: `/${drinkScreen()}`,
+                }}
+              >
+                <Drink>DRINK</Drink>
+              </Link>
+            </CompleteDrinkContainer>
           </ScreenContainer>
         )}
       </BlankBackground>
     );
   };
 
-  const score = Object.values(names);
-  console.log(scoreNameArray);
-
-  if (Object.values(names).length && currentName && lemonFill) {
-    return (
-      <ScreenBackground>
-        {!scoreUpdate ? (
-          chellenges()
-        ) : (
-          <ScreenContainer>
-            <Title>SCOREBOARD</Title>
-            <ScoreboardContainer>
-              {scoreNameArray.map((player) => {
-                return (
-                  <EachPersonsScoreContainer>
-                    <IconsContainer>
-                      <IconDiv>
-                        <Score>{player.whiskeyScore}</Score>
-                      </IconDiv>
-                      <IconDiv>
-                        <Score>{player.lemonadeScore}</Score>
-                      </IconDiv>
-                      <IconDiv>
-                        <Score>{player.martiniScore}</Score>
-                      </IconDiv>
-                      <IconDiv>
-                        <Score>{player.mojitoScore}</Score>
-                      </IconDiv>
-                    </IconsContainer>
-                    <ScoreNameContainer>
-                      <ScoreName>{player.name}</ScoreName>
-                    </ScoreNameContainer>
-                  </EachPersonsScoreContainer>
-                );
-              })}
-            </ScoreboardContainer>
-            {/* <Score>
-              <Names>
-                {score.map((player) => {
-                  return (
-                    <ScoreBoardContainer>
-                      <CheckboxName>{player.name}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Names>
-              <Checkboxes>
-                {score.map((player) => {
-                  return (
-                    <CheckboxSpacing>
-                      <CheckboxName>{player[currentCard]}</CheckboxName>
-                    </CheckboxSpacing>
-                  );
-                })}
-              </Checkboxes>
-            </CheckboxContainer> */}
-            <Link
-              to={{
-                pathname: `/ingredients`,
-              }}
-            >
-              <ConfirmButton>CONFIRM</ConfirmButton>
-            </Link>
-          </ScreenContainer>
-        )}
-      </ScreenBackground>
-    );
+  if (names && currentName && cardContent) {
+    return <ScreenBackground>{challenges()}</ScreenBackground>;
   }
 };
 
@@ -301,44 +189,36 @@ const ScreenContainer = styled.div`
   width: 90%;
 `;
 
-const Title = styled.h1`
-  font-family: SunbirdBlack;
-  letter-spacing: 2px;
-  text-align: center;
-  font-size: 26px;
-  margin-bottom: 30px;
-  width: 80%;
-`;
-
-const Name = styled.h1`
-  background-color: #ee3347;
-  padding: 16px;
-  font-size: 26px;
-  width: 40%;
-  border-radius: 10px;
-  border: solid 3px black;
-  font-family: SunbirdRegular;
-  text-align: center;
+const Counter = styled.h1`
+  font-size: 5rem;
   margin: 0px;
-  margin-bottom: 20px;
+`;
+
+const TimerButton = styled.button`
+  color: black;
+  background-color: rgba(255, 255, 255, 0.5);
+  // background-color: #ee3347;
+  font-size: 22px;
+  padding: 14px 0px 14px 0px;
+  letter-spacing: 2px;
+  width: 50vw;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: solid 3px black;
+  font-family: SunbirdBlack;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
 
-const BlankWord = styled.h1`
-  text-align: center;
-  background-color: #ee3347;
-  padding: 20px;
-  font-size: 26px;
-  border-radius: 10px;
-  border: solid 3px black;
-  font-family: SunbirdRegular;
-  margin-bottom: 40px;
-  box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+const CompleteDrinkContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ChallengeComplete = styled.button`
   color: black;
-  background-color: #ee3347;
+  background-color: rgba(255, 255, 255, 0.5);
+  // background-color: #ee3347;
   font-size: 22px;
   padding: 14px 0px 14px 0px;
   letter-spacing: 2px;
@@ -352,7 +232,8 @@ const ChallengeComplete = styled.button`
 
 const Drink = styled.button`
   color: black;
-  background-color: #ee3347;
+  background-color: rgba(255, 255, 255, 0.5);
+  // background-color: #ee3347;
   font-size: 22px;
   padding: 12px 0px 12px 0px;
   letter-spacing: 2px;
@@ -362,55 +243,6 @@ const Drink = styled.button`
   border: solid 3px black;
   font-family: SunbirdBlack;
   box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
-`;
-
-const CheckboxContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  // height: 300px;
-  width: 80%;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  overflow-y: auto;
-`;
-
-const CheckboxSpacing = styled.div`
-  display: flex;
-  align-items: center;
-  height: 50px;
-`;
-
-const Names = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  // justify-content: space-between;
-  width: 50%;
-`;
-
-const CheckboxName = styled.h2`
-  font-size: 24px;
-  margin: 0px;
-`;
-
-const Checkboxes = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  // justify-content: space-between;
-  width: 30%;
-`;
-
-const Checkbox = styled.input`
-  accent-color: #ee3347;
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
-  transform: scale(2);
-  padding: 10px;
 `;
 
 const BackOfCardContainer = styled.div`
@@ -427,10 +259,18 @@ const BackOfCard = styled.img`
 const CardContentContainer = styled.div`
   position: absolute;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+`;
+
+const CardTitle = styled.p`
+  font-size: 26px;
+  text-align: center;
+  width: 80%;
+  text-decoration: underline;
 `;
 
 const CardContent = styled.p`
@@ -439,60 +279,11 @@ const CardContent = styled.p`
   width: 70%;
 `;
 
-const ScoreboardContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-const EachPersonsScoreContainer = styled.div`
-  width: 100%;
-`;
-
-const IconsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: space-between;
-  justify-content: space-evenly;
-  width: 100%;
-  height: ;
-`;
-
-const IconDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ScoreNameContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ScoreName = styled.p`
+const CardComment = styled.p`
   font-size: 20px;
-`;
-
-const Score = styled.h1`
-  margin: 0px;
-`;
-
-const ConfirmButton = styled.button`
-  color: black;
-  background-color: #ee3347;
-  font-size: 22px;
-  padding: 12px 0px 12px 0px;
-  letter-spacing: 3px;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  width: 44vw;
-  border-radius: 10px;
-  border: solid 3px black;
-  font-family: SunbirdBlack;
-  box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+  text-align: center;
+  width: 80%;
+  font-style: italic;
 `;
 
 export default ChallengeScreen;

@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import appBackground from '../assets/app-background.png';
+import { scoreBoardRequest } from '../actions/scoreboard';
 
 const DrinkScreen = () => {
+  const dispatch = useDispatch();
   const [drinkers, setDrinkers] = useState([]);
   const [reveal, setReveal] = useState(false);
   const [drinkNumber, setDrinkNumber] = useState(0);
@@ -33,48 +36,36 @@ const DrinkScreen = () => {
 
   if (drinkers.length > 0) {
     return (
-      <ScreenBackground>
-        <ScreenContainer>
-          <Title>HOW MANY TIMES MUST {drinkTitle()} DRINK?</Title>
-          <DrinkCountContainer>
-            {reveal ? (
-              <DrinkNumberContainer>
-                <NumberContainer>
-                  <DrinkNumber>{drinkNumber}</DrinkNumber>
-                </NumberContainer>
-                <Link
-                  to={{
-                    pathname: `/ingredients`,
-                  }}
+      <ScreenContainer>
+        <Title>HOW MANY TIMES MUST {drinkTitle()} DRINK?</Title>
+        <DrinkCountContainer>
+          {reveal ? (
+            <DrinkNumberContainer>
+              <NumberContainer>
+                <DrinkNumber>{drinkNumber}</DrinkNumber>
+              </NumberContainer>
+              <Link
+                to={{
+                  pathname: `/ingredients`,
+                }}
+              >
+                <NextRoundButton
+                  onClick={() => dispatch(scoreBoardRequest(true))}
                 >
-                  <NextRoundButton>NEXT ROUND</NextRoundButton>
-                </Link>
-              </DrinkNumberContainer>
-            ) : (
-              <DrinkCountCover onClick={() => revealClick()}>
-                <RevealText>?</RevealText>
-              </DrinkCountCover>
-            )}
-          </DrinkCountContainer>
-        </ScreenContainer>
-      </ScreenBackground>
+                  NEXT ROUND
+                </NextRoundButton>
+              </Link>
+            </DrinkNumberContainer>
+          ) : (
+            <DrinkCountCover onClick={() => revealClick()}>
+              <RevealText>?</RevealText>
+            </DrinkCountCover>
+          )}
+        </DrinkCountContainer>
+      </ScreenContainer>
     );
   }
 };
-
-const ScreenBackground = styled.div`
-  display: flex;
-  color: black;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: -webkit-fill-available;
-  width: 100vw;
-  background-image: url(${appBackground});
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-`;
 
 const ScreenContainer = styled.div`
   display: flex;
