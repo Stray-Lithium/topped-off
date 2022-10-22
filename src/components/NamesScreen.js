@@ -2,159 +2,140 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiPlus } from 'react-icons/fi';
+import title from '../assets/whos-playing.png';
 
 const NamesScreen = () => {
-  const [name, setName] = useState('');
-  const [players, setPlayers] = useState({});
+	const [name, setName] = useState('');
+	const [players, setPlayers] = useState({});
 
-  useEffect(() => {}, [players]);
+	useEffect(() => {}, [players]);
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
+	const handleNameChange = (event) => {
+		setName(event.target.value);
+	};
 
-  const handleSubmit = (event) => {
-    let playerObject = {};
-    playerObject[name.toUpperCase()] = {
-      name: name.toUpperCase(),
-      lemonadeScore: 0,
-      whiskeyScore: 0,
-      martiniScore: 0,
-      mojitoScore: 0,
-    };
-    console.log(playerObject, 'obj');
-    setPlayers({ ...players, ...playerObject });
-    setName('');
-    event.preventDefault();
-  };
+	const handleSubmit = (event) => {
+		let playerObject = {};
+		playerObject[name.toUpperCase()] = {
+			name: name.toUpperCase(),
+			lemonadeScore: 0,
+			whiskeyScore: 0,
+			martiniScore: 0,
+			mojitoScore: 0,
+		};
+		console.log(playerObject, 'obj');
+		setPlayers({ ...players, ...playerObject });
+		setName('');
+		event.preventDefault();
+	};
 
-  const ready = () => {
-    localStorage.setItem('names', JSON.stringify(players));
-  };
+	const ready = () => {
+		localStorage.setItem('names', JSON.stringify(players));
+	};
 
-  const playerData = () => {
-    return Object.values(players);
-  };
-  const playersArray = playerData();
+	const playerData = () => {
+		return Object.values(players);
+	};
+	const playersArray = playerData();
 
-  return (
-    <ScreenContainer>
-      <Title>ENTER PLAYER NAMES</Title>
-      <PlayersContainer>
-        <PlayerTitle>PLAYERS</PlayerTitle>
-        <PlayersList>
-          {playersArray.map((player) => {
-            return <PlayerName>{player.name}</PlayerName>;
-          })}
-        </PlayersList>
-      </PlayersContainer>
-      <InputContainer>
-        <FiPlus style={styles.plusIcon} onClick={handleSubmit} />
-        <Form onSubmit={handleSubmit}>
-          <Input
-            type='text'
-            value={name}
-            onChange={handleNameChange}
-            placeholder='Enter Name...'
-          />
-        </Form>
-      </InputContainer>
-      <Link to='/ingredients'>
-        <ReadyButton onClick={ready}>READY!</ReadyButton>
-      </Link>
-    </ScreenContainer>
-  );
+	return (
+		<ScreenContainer>
+			<Title src={title} />
+			<PlayersContainer>
+				<PlayersList>
+					{playersArray.map((player) => {
+						return <PlayerName>{player.name}</PlayerName>;
+					})}
+				</PlayersList>
+			</PlayersContainer>
+			<InputContainer>
+				<FiPlus style={styles.plusIcon} onClick={handleSubmit} />
+				<Form onSubmit={handleSubmit}>
+					<Input
+						type='text'
+						value={name}
+						onChange={handleNameChange}
+						placeholder='Enter Name...'
+					/>
+				</Form>
+			</InputContainer>
+			<Link to='/ingredients'>
+				<ReadyButton onClick={ready}>READY!</ReadyButton>
+			</Link>
+		</ScreenContainer>
+	);
 };
 
 const styles = {
-  plusIcon: {
-    position: 'absolute',
-    right: -15,
-    top: -15,
-    fontSize: 26,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: '#ee3347',
-    boxShadow: 'rgba(0, 0, 0, 0.2) -2px -5px 0px inset',
-    border: 'solid 3px black',
-  },
+	plusIcon: {
+		position: 'absolute',
+		right: -15,
+		top: -15,
+		fontSize: 26,
+		padding: 10,
+		borderRadius: 20,
+		backgroundColor: '#ee3347',
+		boxShadow: 'rgba(0, 0, 0, 0.2) -2px -5px 0px inset',
+		border: 'solid 3px black',
+	},
 };
 
 const ScreenContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 90%;
+	height: 100%;
 `;
 
-const Title = styled.h1`
-  font-family: SunbirdRegular;
-  color: #ee3347;
-  width: 80%;
-  letter-spacing: 5px;
-  text-align: center;
-  font-size: 30px;
-  margin-bottom: 40px;
-  text-shadow: 
-  /* first layer at 1px */ -1px -1px 0px #000, 0px -1px 0px #000,
-    1px -1px 0px #000, -1px 0px 0px #000, 1px 0px 0px #000, -1px 1px 0px #000,
-    0px 1px 0px #000, 1px 1px 0px #000,
-    /* second layer at 2px */ -2px -2px 0px #000, -1px -2px 0px #000,
-    0px -2px 0px #000, 1px -2px 0px #000, 2px -2px 0px #000, 2px -1px 0px #000,
-    2px 0px 0px #000, 2px 1px 0px #000, 2px 2px 0px #000, 1px 2px 0px #000,
-    0px 2px 0px #000, -1px 2px 0px #000, -2px 2px 0px #000, -2px 1px 0px #000,
-    -2px 0px 0px #000, -2px -1px 0px #000;
+const Title = styled.img`
+	width: 80vw;
+	margin-bottom: 10px;
+	margin-bottom: 30px;
 `;
 
 const PlayersContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-const PlayerTitle = styled.h2`
-  text-align: center;
-  letter-spacing: 3px;
-  width: 50%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
 `;
 
 const PlayersList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px;
-  width: 50%;
-  height: 200px;
-  border-top: solid 2px black;
-  overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 8px;
+	width: 100%;
+	height: 240px;
+	border-top: solid 3px black;
+	overflow-y: auto;
 `;
 
 const PlayerName = styled.h2`
-  font-size: 14px;
-  margin: 4px;
-  border-radius: 10px;
-  text-align: center;
-  width: 40vw;
-  padding: 6px;
-  letter-spacing: 3px;
-  background-color: white;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: solid 3px black;
+	font-size: 22px;
+	margin: 4px;
+	border-radius: 10px;
+	text-align: center;
+	min-width: 40vw;
+	padding: 6px;
+	letter-spacing: 1px;
+	background-color: white;
+	background-color: rgba(255, 255, 255, 0.5);
+	border: solid 3px black;
 `;
 
 const InputContainer = styled.div`
-  position: relative;
-  margin-top: 30px;
+	position: relative;
+	margin-top: 30px;
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const Input = styled.input`
@@ -184,18 +165,18 @@ const Input = styled.input`
 `;
 
 const ReadyButton = styled.button`
-  background-color: #ee3347;
-  font-size: 26px;
-  padding: 12px 0px 12px 0px;
-  width: 50vw;
-  letter-spacing: 5px;
-  border-radius: 10px;
-  margin-top: 30px;
-  border: solid 3px black;
-  font-family: SunbirdBlack;
-  color: black;
-  margin-bottom: 20px;
-  box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+	background-color: #ee3347;
+	font-size: 26px;
+	padding: 12px 0px 12px 0px;
+	width: 50vw;
+	letter-spacing: 5px;
+	border-radius: 10px;
+	margin-top: 30px;
+	border: solid 3px black;
+	font-family: SunbirdBlack;
+	color: black;
+	margin-bottom: 20px;
+	box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
 `;
 
 export default NamesScreen;
