@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/topped-off/static/css/main.aa93aa1e.css",
-    "main.js": "/topped-off/static/js/main.81d80fa9.js",
+    "main.js": "/topped-off/static/js/main.69687737.js",
     "static/js/787.96284cd9.chunk.js": "/topped-off/static/js/787.96284cd9.chunk.js",
     "static/media/mojito-card.png": "/topped-off/static/media/mojito-card.a59615f4913d6fa8504b.png",
     "static/media/lemonade-card.png": "/topped-off/static/media/lemonade-card.9b7dcb26d7b2c054966d.png",
@@ -19,13 +19,16 @@
     "static/media/martini-background.png": "/topped-off/static/media/martini-background.5f19748afc7d3ea47677.png",
     "static/media/whiskey-background.png": "/topped-off/static/media/whiskey-background.b1508268f0ea6741f826.png",
     "static/media/app-background.png": "/topped-off/static/media/app-background.8b847d682cb90e534b86.png",
+    "static/media/scoreboard.png": "/topped-off/static/media/scoreboard.13f81482a44f4f43b576.png",
+    "static/media/whos-playing.png": "/topped-off/static/media/whos-playing.600154d2e8d5a6273bca.png",
+    "static/media/click.mp3": "/topped-off/static/media/click.720d13ee6ef0421c6b1f.mp3",
     "index.html": "/topped-off/index.html",
     "main.aa93aa1e.css.map": "/topped-off/static/css/main.aa93aa1e.css.map",
-    "main.81d80fa9.js.map": "/topped-off/static/js/main.81d80fa9.js.map",
+    "main.69687737.js.map": "/topped-off/static/js/main.69687737.js.map",
     "787.96284cd9.chunk.js.map": "/topped-off/static/js/787.96284cd9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.aa93aa1e.css",
-    "static/js/main.81d80fa9.js"
+    "static/js/main.69687737.js"
   ]
 }
