@@ -28,7 +28,7 @@ function App() {
 
 	return (
 		<ScreenBackground>
-			{/* {scoreBoard ? <ScoreScreen /> : <></>}
+			{scoreBoard ? <ScoreScreen /> : <></>}
 			<Routes>
 				<Route path='/' element={<StartScreen />}></Route>
 				<Route exact path='/names' element={<NamesScreen />}></Route>
@@ -59,7 +59,7 @@ function App() {
 					element={<LemonadeWhoCompleted />}
 				></Route>
 				<Route exact path='/drink' element={<DrinkScreen />}></Route>
-			</Routes> */}
+			</Routes>
 		</ScreenBackground>
 	);
 }
