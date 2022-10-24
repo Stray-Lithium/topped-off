@@ -14,20 +14,20 @@ import routeSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
-  reducers,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
+	reducers,
+	composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 sagaMiddleware.run(routeSaga);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <HashRouter>
-        <App />
-      </HashRouter>
-    </Provider>
-  </React.StrictMode>
+	<React.StrictMode>
+		<HashRouter>
+			<Provider store={store}>
+				<App />
+			</Provider>
+		</HashRouter>
+	</React.StrictMode>
 );
 
 reportWebVitals();
