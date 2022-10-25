@@ -23,9 +23,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<HashRouter>
-			<Provider store={store}>
+			<h1>hello</h1>
+			{/* <Provider store={store}>
 				<App />
-			</Provider>
+			</Provider> */}
 		</HashRouter>
 	</React.StrictMode>
 );
