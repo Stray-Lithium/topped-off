@@ -26,11 +26,15 @@ function App() {
 		// }
 	}, []);
 
+	{
+		/* <h1>heloo</h1> */
+	}
+	{
+		/* {scoreBoard ? <ScoreScreen /> : <></>} */
+	}
 	return (
 		<ScreenBackground>
-			<h1>heloo</h1>
-			{/* {scoreBoard ? <ScoreScreen /> : <></>} */}
-			{/* <Routes>
+			<Routes>
 				<Route path='/' element={<StartScreen />}></Route>
 				<Route exact path='/names' element={<NamesScreen />}></Route>
 				<Route
@@ -60,7 +64,7 @@ function App() {
 					element={<LemonadeWhoCompleted />}
 				></Route>
 				<Route exact path='/drink' element={<DrinkScreen />}></Route>
-			</Routes> */}
+			</Routes>
 		</ScreenBackground>
 	);
 }
