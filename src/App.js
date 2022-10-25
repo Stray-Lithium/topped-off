@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './App.css';
 import appBackground from './assets/app-background.png';
@@ -35,35 +35,32 @@ function App() {
 	return (
 		<ScreenBackground>
 			<Routes>
-				<Route path='/' element={<StartScreen />}></Route>
-				<Route exact path='/names' element={<NamesScreen />}></Route>
+				<Route exact path='/' element={<StartScreen />} />
+				<Route exact path='/names' element={<NamesScreen />} />
 				<Route
 					exact
 					path='/ingredients'
 					element={<IngredientsScreen />}
 				></Route>
-				<Route exact path='/rules' element={<Rules />}></Route>
+				<Route exact path='/rules' element={<Rules />} />
 				<Route
 					exact
 					path='/challenge/:ingredient'
 					element={<ChallengeScreen />}
-				></Route>
-				<Route
-					exact
-					path='/lemonade-screen'
-					element={<LemonadeScreen />}
-				></Route>
+				/>
+				<Route exact path='/lemonade-screen' element={<LemonadeScreen />} />
 				<Route
 					exact
 					path='/lemonade-challenge'
 					element={<LemonadeChallenge />}
-				></Route>
+				/>
 				<Route
 					exact
 					path='/lemonade-completed'
 					element={<LemonadeWhoCompleted />}
-				></Route>
-				<Route exact path='/drink' element={<DrinkScreen />}></Route>
+				/>
+				<Route exact path='/drink' element={<DrinkScreen />} />
+				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 		</ScreenBackground>
 	);
