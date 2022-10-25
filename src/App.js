@@ -16,7 +16,7 @@ import ScoreScreen from './components/ScoreScreen';
 import LemonadeWhoCompleted from './components/LemonadeWhoCompleted';
 
 function App() {
-	const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
+	// const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
 	// const [names, setNames] = useState([]);
 
 	useEffect(() => {
@@ -24,11 +24,11 @@ function App() {
 		// if (items && names.length === 0) {
 		// 	setNames(items);
 		// }
-	}, [scoreBoard]);
+	}, []);
 
 	return (
 		<ScreenBackground>
-			{scoreBoard ? <ScoreScreen /> : <></>}
+			{/* {scoreBoard ? <ScoreScreen /> : <></>} */}
 			<Routes>
 				<Route path='/' element={<StartScreen />}></Route>
 				<Route exact path='/names' element={<NamesScreen />}></Route>
@@ -70,8 +70,8 @@ const ScreenBackground = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	// height: 100vh;
-	min-height: -webkit-fill-available;
+	height: 100vh;
+	// min-height: -webkit-fill-available;
 	width: 100vw;
 	background-image: url(${appBackground});
 	background-size: cover;
