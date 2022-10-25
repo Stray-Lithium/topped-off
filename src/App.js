@@ -17,13 +17,13 @@ import LemonadeWhoCompleted from './components/LemonadeWhoCompleted';
 
 function App() {
 	const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
-	// const [names, setNames] = useState([]);
+	const [names, setNames] = useState([]);
 
 	useEffect(() => {
-		// const items = JSON.parse(localStorage.getItem('names'));
-		// if (items && names.length === 0) {
-		// 	setNames(items);
-		// }
+		const items = JSON.parse(localStorage.getItem('names'));
+		if (items && names.length === 0) {
+			setNames(items);
+		}
 	}, [scoreBoard]);
 
 	{

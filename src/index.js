@@ -21,13 +21,13 @@ sagaMiddleware.run(routeSaga);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<Provider store={store}>
-		<React.StrictMode>
-			<HashRouter basename='/'>
+	<React.StrictMode>
+		<HashRouter basename='/'>
+			<Provider store={store}>
 				<App />
-			</HashRouter>
-		</React.StrictMode>
-	</Provider>
+			</Provider>
+		</HashRouter>
+	</React.StrictMode>
 );
 
 reportWebVitals();
