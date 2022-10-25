@@ -95,7 +95,7 @@ const ScreenBackground = styled.div`
 	color: black;
 	flex-direction: column;
 	align-items: center;
-	// height: 100vh;
+	height: 100vh;
 	min-height: -webkit-fill-available;
 	width: 100vw;
 	background-image: url(${appBackground});
