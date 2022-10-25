@@ -14,19 +14,6 @@ import LemonadeChallenge from './components/LemonadeChallenge';
 import DrinkScreen from './components/DrinkScreen';
 import ScoreScreen from './components/ScoreScreen';
 import LemonadeWhoCompleted from './components/LemonadeWhoCompleted';
-import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, applyMiddleware } from 'redux';
-import createSagaMiddleware from '@redux-saga/core';
-import reducers from './reducers';
-import routeSaga from './sagas';
-
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-	reducers,
-	composeWithDevTools(applyMiddleware(sagaMiddleware))
-);
-sagaMiddleware.run(routeSaga);
 
 function App() {
 	const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
@@ -40,42 +27,40 @@ function App() {
 	}, [scoreBoard]);
 
 	return (
-		<Provider store={store}>
-			<ScreenBackground>
-				{scoreBoard ? <ScoreScreen /> : <></>}
-				<Routes>
-					<Route path='/' element={<StartScreen />}></Route>
-					<Route exact path='/names' element={<NamesScreen />}></Route>
-					<Route
-						exact
-						path='/ingredients'
-						element={<IngredientsScreen />}
-					></Route>
-					<Route exact path='/rules' element={<Rules />}></Route>
-					<Route
-						exact
-						path='/challenge/:ingredient'
-						element={<ChallengeScreen />}
-					></Route>
-					<Route
-						exact
-						path='/lemonade-screen'
-						element={<LemonadeScreen />}
-					></Route>
-					<Route
-						exact
-						path='/lemonade-challenge'
-						element={<LemonadeChallenge />}
-					></Route>
-					<Route
-						exact
-						path='/lemonade-completed'
-						element={<LemonadeWhoCompleted />}
-					></Route>
-					<Route exact path='/drink' element={<DrinkScreen />}></Route>
-				</Routes>
-			</ScreenBackground>
-		</Provider>
+		<ScreenBackground>
+			{scoreBoard ? <ScoreScreen /> : <></>}
+			<Routes>
+				<Route path='/' element={<StartScreen />}></Route>
+				<Route exact path='/names' element={<NamesScreen />}></Route>
+				<Route
+					exact
+					path='/ingredients'
+					element={<IngredientsScreen />}
+				></Route>
+				<Route exact path='/rules' element={<Rules />}></Route>
+				<Route
+					exact
+					path='/challenge/:ingredient'
+					element={<ChallengeScreen />}
+				></Route>
+				<Route
+					exact
+					path='/lemonade-screen'
+					element={<LemonadeScreen />}
+				></Route>
+				<Route
+					exact
+					path='/lemonade-challenge'
+					element={<LemonadeChallenge />}
+				></Route>
+				<Route
+					exact
+					path='/lemonade-completed'
+					element={<LemonadeWhoCompleted />}
+				></Route>
+				<Route exact path='/drink' element={<DrinkScreen />}></Route>
+			</Routes>
+		</ScreenBackground>
 	);
 }
 
