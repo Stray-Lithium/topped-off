@@ -16,7 +16,7 @@ import ScoreScreen from './components/ScoreScreen';
 import LemonadeWhoCompleted from './components/LemonadeWhoCompleted';
 
 function App() {
-	// const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
+	const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
 	// const [names, setNames] = useState([]);
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ function App() {
 		// if (items && names.length === 0) {
 		// 	setNames(items);
 		// }
-	}, []);
+	}, [scoreBoard]);
 
 	{
 		/* <h1>heloo</h1> */
