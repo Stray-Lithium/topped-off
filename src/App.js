@@ -29,11 +29,10 @@ function App() {
 	{
 		/* <h1>heloo</h1> */
 	}
-	{
-		/* {scoreBoard ? <ScoreScreen /> : <></>} */
-	}
+
 	return (
 		<ScreenBackground>
+			{scoreBoard ? <ScoreScreen /> : <></>}
 			<Routes>
 				<Route exact path='/' element={<StartScreen />} />
 				<Route exact path='/names' element={<NamesScreen />} />
