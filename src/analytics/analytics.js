@@ -39,35 +39,45 @@ export const storeCard = async (idArray, completed) => {
 	console.log('storing card');
 	if (completed) {
 		let items = await JSON.parse(localStorage.getItem('cardsCompleted'));
+		let newArray = [];
 		idArray.forEach((id) => {
-			items.push(id);
+			newArray.push(id);
 		});
-		localStorage.setItem('cardsCompleted', JSON.stringify(items));
+		localStorage.setItem(
+			'cardsCompleted',
+			JSON.stringify([...items, ...newArray])
+		);
 	} else {
 		let items = await JSON.parse(localStorage.getItem('cardsDrank'));
+		let newArray = [];
 		idArray.forEach((id) => {
-			items.push(id);
+			newArray.push(id);
 		});
-		localStorage.setItem('cardsDrank', JSON.stringify(items));
+		localStorage.setItem('cardsDrank', JSON.stringify([...items, ...newArray]));
 	}
 };
 
 export const storeBlank = async (idArray, completed) => {
-	console.log('storing blank');
 	if (completed) {
-		console.log('blank completed');
 		let items = await JSON.parse(localStorage.getItem('blanksCompleted'));
+		let newArray = [];
 		idArray.forEach((id) => {
-			items.push(id);
+			newArray.push(id);
 		});
-		localStorage.setItem('blanksCompleted', JSON.stringify(items));
+		localStorage.setItem(
+			'blanksCompleted',
+			JSON.stringify([...items, ...newArray])
+		);
 	} else {
-		console.log('blank drank');
 		let items = await JSON.parse(localStorage.getItem('blanksDrank'));
+		let newArray = [];
 		idArray.forEach((id) => {
-			items.push(id);
+			newArray.push(id);
 		});
-		localStorage.setItem('blanksDrank', JSON.stringify(items));
+		localStorage.setItem(
+			'blanksDrank',
+			JSON.stringify([...items, ...newArray])
+		);
 	}
 };
 
@@ -82,6 +92,13 @@ export const storeGameComplete = async (winningCard, numberOfCompleted = 1) => {
 	);
 	completedChallenges += numberOfCompleted;
 	let drank = await JSON.parse(localStorage.getItem('drank'));
+	let blanksCompleted = await JSON.parse(
+		localStorage.getItem('blanksCompleted')
+	);
+	let blanksDrank = await JSON.parse(localStorage.getItem('blanksDrank'));
+	let cardsCompleted = await JSON.parse(localStorage.getItem('cardsCompleted'));
+	let cardsDrank = await JSON.parse(localStorage.getItem('cardsDrank'));
+
 	let completedObject = {
 		numberOfPlayers,
 		startTime,
@@ -90,10 +107,10 @@ export const storeGameComplete = async (winningCard, numberOfCompleted = 1) => {
 		drank,
 		winningCard,
 		endTime: Date.now(),
-		blanksCompleted: [],
-		blanksDrank: [],
-		cardsCompleted: [],
-		cardsDrank: [],
+		blanksCompleted,
+		blanksDrank,
+		cardsCompleted,
+		cardsDrank,
 		gameType: 'classic',
 	};
 	localStorage.setItem('analytics', JSON.stringify(completedObject));

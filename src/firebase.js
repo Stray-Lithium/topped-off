@@ -5,6 +5,8 @@ import {
 	collection,
 	getDocks,
 	getDocs,
+	setDoc,
+	doc,
 } from 'firebase/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -37,4 +39,12 @@ export const tester = (card) => {
 		});
 		console.log(snapshot.docs);
 	});
+};
+
+// Add a new document in collection "cities"
+export const sendGame = (data) => {
+	setDoc(
+		doc(db, 'analytics', `${Math.floor(Math.random() * 1000000 + 1)}`),
+		data
+	);
 };

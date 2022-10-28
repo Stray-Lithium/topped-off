@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { sendGame } from '../firebase';
 
 const EndScreen = () => {
 	const [winningNames, setWinningNames] = useState(false);
 	const [winningCard, setWinningCard] = useState(false);
+	const [analytics, setAnalytics] = useState(false);
+	const [sendAnalytics, setSendAnalytics] = useState(false);
 
 	useEffect(() => {
 		if (!winningNames) {
@@ -19,11 +23,24 @@ const EndScreen = () => {
 		}
 	}, [winningCard]);
 
-	const ending = async () => {
-		const items = await JSON.parse(localStorage.getItem('analytics'));
-		console.log(items, 'end');
-	};
-	ending();
+	useEffect(() => {
+		if (!analytics) {
+			const data = JSON.parse(localStorage.getItem('analytics'));
+			setAnalytics(data);
+		}
+	}, [analytics]);
+
+	useEffect(() => {
+		if (!sendAnalytics) {
+			const data = JSON.parse(localStorage.getItem('sendAnalytics'));
+			setSendAnalytics(data);
+		}
+	}, [sendAnalytics]);
+
+	// const ending = async () => {
+	// 	const items = await JSON.parse(localStorage.getItem('analytics'));
+	// 	ending(items);
+	// };
 
 	const titleMaker = () => {
 		const winnersLength = winningNames.length;
@@ -57,11 +74,50 @@ const EndScreen = () => {
 		}
 	};
 
-	if (winningNames && winningCard) {
+	const endClick = () => {
+		if (sendAnalytics) {
+			sendGame(analytics);
+		}
+	};
+
+	console.log(winningNames, winningCard, analytics, sendAnalytics);
+
+	if (winningNames && winningCard && analytics) {
 		return (
-			<h1>{`${titleMaker()} you topped off ${winningCardMaker()}, congrats!`}</h1>
+			<ScreenContainer>
+				<h1>{`${titleMaker()} you topped off ${winningCardMaker()}, congrats!`}</h1>
+				<Link
+					to={{
+						pathname: `/`,
+					}}
+				>
+					<button onClick={() => endClick()}>quit</button>
+				</Link>
+			</ScreenContainer>
 		);
 	}
 };
+
+const ScreenContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+`;
+
+const StartGame = styled.button`
+	color: black;
+	background-color: #ee3347;
+	font-size: 26px;
+	padding: 12px 0px 12px 0px;
+	width: 50vw;
+	letter-spacing: 5px;
+	border-radius: 10px;
+	border: solid 3px black;
+	font-family: SunbirdBlack;
+	margin-bottom: 20px;
+	box-shadow: rgba(0, 0, 0, 0.2) -2px -5px 0px inset;
+`;
 
 export default EndScreen;

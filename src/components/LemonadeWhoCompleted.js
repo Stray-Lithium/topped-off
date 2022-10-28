@@ -58,7 +58,7 @@ const LemonadeWhoCompleted = () => {
 
 	const isEnd = () => {
 		const namesCopy = names;
-		if (completedNames.length > 0) {
+		if (completedNames.length === lemonNames.length) {
 			dispatch(scoreBoardRequest(true));
 			handleOnSubmit('ingredients');
 		}

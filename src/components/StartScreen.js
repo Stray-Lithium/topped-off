@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/topped-logo-red.png';
 import audio from '../assets/audio/click.mp3';
-import { tester } from '../firebase';
+import { sendGame, tester } from '../firebase';
 import { resetAnalytics } from '../analytics/analytics';
 
 const StartScreen = () => {
 	const [start, setStart] = useState(false);
+	const [test, setTest] = useState(0);
 	const [rules, setRules] = useState(false);
 	const audioToPlay = new Audio(audio);
 
@@ -17,6 +18,12 @@ const StartScreen = () => {
 		resetAnalytics();
 		audioToPlay.play();
 		setStart(true);
+		if (test > 9) {
+			localStorage.setItem('sendAnalytics', JSON.stringify(true));
+		}
+		if (test < 10) {
+			localStorage.setItem('sendAnalytics', JSON.stringify(false));
+		}
 	};
 
 	const rulesClicked = () => {
@@ -35,6 +42,12 @@ const StartScreen = () => {
 					PLAY
 				</StartGame>
 			</Link>
+			<StartGame
+				style={{ backgroundColor: test > 9 ? 'black' : '' }}
+				onClick={() => setTest(test + 1)}
+			>
+				Test
+			</StartGame>
 			{/* <Link to='/rules'>
 				<Rules
 					onClick={() => rulesClicked()}
