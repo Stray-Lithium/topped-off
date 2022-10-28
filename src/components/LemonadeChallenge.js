@@ -46,15 +46,20 @@ const LemonadeScreen = () => {
 	};
 	const scoreNameArray = scoreNamesArray();
 
+	const okClick = () => {
+		audioToPlay.play();
+		localStorage.setItem('LemonadeBlankAndCardId', JSON.stringify(challenge));
+	};
+
 	if (lemonNames.length && challenge && scoreNameArray) {
 		return (
 			<ScreenContainer>
 				<BackOfCardContainer>
 					<BackOfCard src={yellowCard} />
 					<CardContentContainer>
-						<CardContent>
-							{titleMaker()} {challenge.content}
-						</CardContent>
+						<CardTitle>{challenge.title}</CardTitle>
+						<CardContent>{`${titleMaker()} ${challenge.content}`}</CardContent>
+						<CardComment>{challenge.comment}</CardComment>
 					</CardContentContainer>
 				</BackOfCardContainer>
 				<Link
@@ -62,7 +67,7 @@ const LemonadeScreen = () => {
 						pathname: `/lemonade-completed`,
 					}}
 				>
-					<ConfirmButton onClick={() => audioToPlay.play()}>OK</ConfirmButton>
+					<ConfirmButton onClick={() => okClick()}>OK</ConfirmButton>
 				</Link>
 			</ScreenContainer>
 		);
@@ -89,13 +94,30 @@ const BackOfCard = styled.img`
 	width: 80vw;
 `;
 
+// const CardContentContainer = styled.div`
+// 	position: absolute;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// 	width: 100%;
+// 	height: 100%;
+// `;
+
 const CardContentContainer = styled.div`
 	position: absolute;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
 	height: 100%;
+`;
+
+const CardTitle = styled.p`
+	font-size: 26px;
+	text-align: center;
+	width: 80%;
+	// text-decoration: underline;
 `;
 
 const CardContent = styled.p`
@@ -103,6 +125,19 @@ const CardContent = styled.p`
 	text-align: center;
 	width: 70%;
 `;
+
+const CardComment = styled.p`
+	font-size: 20px;
+	text-align: center;
+	width: 80%;
+	font-style: italic;
+`;
+
+// const CardContent = styled.p`
+// 	font-size: 22px;
+// 	text-align: center;
+// 	width: 70%;
+// `;
 
 const ConfirmButton = styled.button`
 	color: black;

@@ -168,7 +168,7 @@ const EachPersonsScoreContainer = styled.div`
 	width: 96%;
 	padding-bottom: 8px;
 	border: solid 4px black;
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: #808184;
 	border-radius: 30px;
 	margin-bottom: 20px;
 `;

@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { scoreBoardRequest } from '../actions/scoreboard';
 import {
+	storeBlank,
+	storeCard,
 	storeCompletedChallenge,
 	storeGameComplete,
 } from '../analytics/analytics';
@@ -14,6 +16,7 @@ const LemonadeWhoCompleted = () => {
 	const navigate = useNavigate();
 	const [names, setNames] = useState(false);
 	const [lemonNames, setLemonNames] = useState(false);
+	const [cardContent, setCardContent] = useState(false);
 	const [completedNames, setCompletedNames] = useState([]);
 	const handleOnSubmit = useCallback(
 		(ingredientsOrDrink) =>
@@ -32,6 +35,15 @@ const LemonadeWhoCompleted = () => {
 			setNames(names);
 		}
 	}, [lemonNames, names]);
+
+	useEffect(() => {
+		if (!cardContent) {
+			const challenge = JSON.parse(
+				localStorage.getItem('LemonadeBlankAndCardId')
+			);
+			setCardContent(challenge);
+		}
+	}, [cardContent]);
 
 	const checkboxClick = (e, checkName) => {
 		audioToPlay.play();
@@ -52,12 +64,16 @@ const LemonadeWhoCompleted = () => {
 		}
 		storeCompletedChallenge(completedNames.length);
 		let winners = [];
+		let completedCardsArray = [];
 		completedNames.forEach((name) => {
+			completedCardsArray.push(cardContent.id);
 			namesCopy[name].lemonadeScore += 1;
-			if (namesCopy[name].lemonadeScore === 1) {
+			if (namesCopy[name].lemonadeScore === 4) {
 				winners.push(name);
 			}
 		});
+		localStorage.setItem('names', JSON.stringify(namesCopy));
+		storeCard(completedCardsArray, true);
 		if (winners.length > 0) {
 			handleOnSubmit('end-screen');
 			localStorage.setItem('winningNames', JSON.stringify(winners));
@@ -68,22 +84,23 @@ const LemonadeWhoCompleted = () => {
 
 	const confirm = () => {
 		audioToPlay.play();
-		const namesCopy = names;
-		localStorage.setItem('names', JSON.stringify(namesCopy));
 		if (lemonNames.length !== completedNames.length) {
 			let drinkers = [];
+			let drankCardsArray = [];
 			lemonNames.forEach((player) => {
 				if (!completedNames.includes(player)) {
+					drankCardsArray.push(cardContent.id);
 					drinkers.push(player);
 				}
 			});
 			localStorage.setItem('drinkers', JSON.stringify(drinkers));
+			storeCard(drankCardsArray, false);
 			handleOnSubmit('drink');
 		}
 		isEnd();
 	};
 
-	if (lemonNames) {
+	if (lemonNames && cardContent) {
 		return (
 			<ScreenContainer>
 				<Title>WHO COMPLETED THE CHALLENGE?</Title>

@@ -142,13 +142,14 @@ const CheckboxContainer = styled.div`
 	width: 80%;
 	margin-top: 40px;
 	margin-bottom: 40px;
-	height: 200px;
+	// height: 200px;
 	overflow-y: auto;
 `;
 
 const CheckboxSpacing = styled.div`
 	display: flex;
 	align-items: center;
+	// margin-bottom: 20px;
 	height: 50px;
 `;
 
@@ -169,6 +170,8 @@ const Checkboxes = styled.div`
 	flex-direction: column;
 	align-items: flex-start;
 	width: 30%;
+	// height: 50px;
+	// basckground-color: orange;
 `;
 
 const Checkbox = styled.input`

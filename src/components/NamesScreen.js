@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiPlus } from 'react-icons/fi';
 import title from '../assets/whos-playing.png';
-import { storeNumberOfPlayers, storeStartTime } from '../analytics/analytics';
+import {
+	storeNumberOfPlayers,
+	storeStartTime,
+	storeCardsAndBlanksEmptyArray,
+} from '../analytics/analytics';
 import audio from '../assets/audio/click.mp3';
 
 const NamesScreen = () => {
@@ -37,6 +41,7 @@ const NamesScreen = () => {
 	const ready = () => {
 		audioToPlay.play();
 		localStorage.setItem('names', JSON.stringify(players));
+		storeCardsAndBlanksEmptyArray();
 		storeNumberOfPlayers(howManyPlayers);
 		storeStartTime();
 	};

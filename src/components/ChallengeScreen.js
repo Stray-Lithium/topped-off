@@ -16,6 +16,8 @@ import LemonadeChallenge from './LemonadeScreen';
 import { scoreBoardRequest } from '../actions/scoreboard';
 import { cardColorRequest } from '../actions/card-color';
 import {
+	storeBlank,
+	storeCard,
 	storeCompletedChallenge,
 	storeGameComplete,
 } from '../analytics/analytics';
@@ -106,10 +108,13 @@ const ChallengeScreen = () => {
 
 	const complete = () => {
 		audioToPlay.play();
-		// dispatch(cardColorRequest(currentCard));
+		storeCard([cardContent.id], true);
+		if (currentCard !== 'mojitoScore') {
+			storeBlank([cardContent.blankId], true);
+		}
 		const namesCopy = names;
 		namesCopy[currentName][currentCard] += 1;
-		if (namesCopy[currentName][currentCard] === 1) {
+		if (namesCopy[currentName][currentCard] === 4) {
 			handleOnSubmit('end-screen');
 			localStorage.setItem('winningNames', JSON.stringify([currentName]));
 			storeGameComplete(currentCard);
@@ -134,6 +139,14 @@ const ChallengeScreen = () => {
 	const doneButtonClick = () => {
 		audioToPlay.play();
 		setCounter(0);
+	};
+
+	const drinkClicked = () => {
+		audioToPlay.play();
+		storeCard([cardContent.id], false);
+		if (currentCard !== 'mojitoScore') {
+			storeBlank([cardContent.blankId], false);
+		}
 	};
 
 	const challenges = () => {
@@ -177,7 +190,7 @@ const ChallengeScreen = () => {
 									pathname: `/${drinkScreen()}`,
 								}}
 							>
-								<Drink onClick={() => audioToPlay.play()}>DRINK</Drink>
+								<Drink onClick={() => drinkClicked()}>DRINK</Drink>
 							</Link>
 						</CompleteDrinkContainer>
 					</ScreenContainer>
