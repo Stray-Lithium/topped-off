@@ -11,6 +11,9 @@ import whiteBackground from '../assets/mojito-background.png';
 import yellowBackground from '../assets/lemonade-background.png';
 import { useDispatch } from 'react-redux';
 import { scoreBoardRequest } from '../actions/scoreboard';
+import { storeRoundCount } from '../analytics/analytics';
+import audio from '../assets/audio/click.mp3';
+import { cardColorRequest } from '../actions/card-color';
 
 const IngredientsScreen = () => {
 	const dispatch = useDispatch();
@@ -18,6 +21,7 @@ const IngredientsScreen = () => {
 	const [cocktailCard, setIngredientCard] = useState('');
 	const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
 	const [ingredientImageToRender, setIngredientImageToRender] = useState(false);
+	const audioToPlay = new Audio(audio);
 
 	const ingredientRandomizer = () => {
 		const cards = ['lemonade', 'whiskey', 'martini', 'mojito'];
@@ -26,18 +30,22 @@ const IngredientsScreen = () => {
 		if (card === 'whiskey') {
 			setIngredientCardToRender(redBackground);
 			setIngredientImageToRender(whiskeyCard);
+			dispatch(cardColorRequest('whiskeyScore'));
 		}
 		if (card === 'martini') {
 			setIngredientCardToRender(blueBackground);
 			setIngredientImageToRender(martiniCard);
+			dispatch(cardColorRequest('martiniScore'));
 		}
 		if (card === 'mojito') {
 			setIngredientCardToRender(whiteBackground);
 			setIngredientImageToRender(mojitoCard);
+			dispatch(cardColorRequest('mojitoScore'));
 		}
 		if (card === 'lemonade') {
 			setIngredientCardToRender(yellowBackground);
 			setIngredientImageToRender(lemonadeCard);
+			dispatch(cardColorRequest('lemonadeScore'));
 		}
 		setIngredientCard(card);
 	};
@@ -53,6 +61,8 @@ const IngredientsScreen = () => {
 	}, [names]);
 
 	const storeCurrentCard = () => {
+		audioToPlay.play();
+		storeRoundCount();
 		localStorage.setItem('currentCard', JSON.stringify(`${cocktailCard}Score`));
 		const lengthOfNames = Object.values(names).length;
 		const randomNameIndex = Math.floor(Math.random() * lengthOfNames) + 0;
@@ -60,14 +70,17 @@ const IngredientsScreen = () => {
 		localStorage.setItem('currentName', JSON.stringify(`${name}`));
 	};
 
+	const scoreButtonClick = () => {
+		audioToPlay.play();
+		dispatch(scoreBoardRequest(true));
+	};
+
 	if (ingredientCardToRender) {
 		return (
 			<ScreenBackground
 				style={{ backgroundImage: `url(${ingredientCardToRender})` }}
 			>
-				<ScoreButton onClick={() => dispatch(scoreBoardRequest(true))}>
-					Score
-				</ScoreButton>
+				<ScoreButton onClick={() => scoreButtonClick()}>Score</ScoreButton>
 				<ScreenContainer>
 					{ingredientCardToRender && ingredientImageToRender ? (
 						<Link

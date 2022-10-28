@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { scoreBoardRequest } from '../actions/scoreboard';
-import appBackground from '../assets/app-background.png';
+import blueBackground from '../assets/martini-background.png';
+import redBackground from '../assets/whiskey-background.png';
+import whiteBackground from '../assets/mojito-background.png';
+import yellowBackground from '../assets/lemonade-background.png';
 import {
 	mojitoIconSorter,
 	martiniIconSorter,
@@ -11,10 +14,14 @@ import {
 	lemonadeIconSorter,
 } from '../helper-functions.js/score-icons';
 import title from '../assets/scoreboard.png';
+import audio from '../assets/audio/click.mp3';
 
 const ScoreScreen = ({ roundEnd }) => {
 	const dispatch = useDispatch();
+	const currentCard = useSelector((state) => state.CardColor.cardColor);
 	const [names, setNames] = useState(false);
+	const [cardColor, setCardColor] = useState(false);
+	const audioToPlay = new Audio(audio);
 
 	useEffect(() => {
 		const items = JSON.parse(localStorage.getItem('names'));
@@ -22,6 +29,26 @@ const ScoreScreen = ({ roundEnd }) => {
 			setNames(items);
 		}
 	}, [names]);
+
+	useEffect(() => {}, [currentCard]);
+
+	const backgroundColor = () => {
+		if (currentCard === 'whiskeyScore') {
+			setCardColor(redBackground);
+		}
+		if (currentCard === 'martiniScore') {
+			setCardColor(blueBackground);
+		}
+		if (currentCard === 'mojitoScore') {
+			setCardColor(whiteBackground);
+		}
+		if (currentCard === 'lemonadeScore') {
+			setCardColor(yellowBackground);
+		}
+	};
+	if (!cardColor) {
+		backgroundColor();
+	}
 
 	const scoreNamesArray = () => {
 		const newArray = [];
@@ -32,12 +59,15 @@ const ScoreScreen = ({ roundEnd }) => {
 	};
 	const scoreNameArray = scoreNamesArray();
 
+	const nextRoundClick = () => {
+		audioToPlay.play();
+		dispatch(scoreBoardRequest(false));
+	};
+
 	return (
-		<ScreenBackground>
+		<ScreenBackground style={{ backgroundImage: `url(${cardColor})` }}>
 			<ScoreboardContainer>
-				<ScoreButton onClick={() => dispatch(scoreBoardRequest(false))}>
-					Close
-				</ScoreButton>
+				<ScoreButton onClick={() => nextRoundClick()}>Close</ScoreButton>
 				<Title src={title} />
 				<ScoreList>
 					{scoreNameArray.map((player) => {
@@ -76,7 +106,7 @@ const ScoreScreen = ({ roundEnd }) => {
 							pathname: `/ingredients`,
 						}}
 					>
-						<NextRoundButton onClick={() => dispatch(scoreBoardRequest(false))}>
+						<NextRoundButton onClick={() => nextRoundClick()}>
 							Next Round!
 						</NextRoundButton>
 					</Link>
@@ -98,7 +128,6 @@ const ScreenBackground = styled.div`
 	min-height: 100vh;
 	min-height: -webkit-fill-available;
 	width: 100vw;
-	background-image: url(${appBackground});
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -120,12 +149,15 @@ const Title = styled.img`
 
 const ScoreList = styled.div`
 	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	margin-bottom: 40px;
 	width: 100%;
 	height: 60vh;
-	border: solid 4px #ee3347;
-	outline: 5px solid black;
-	background-color: #808184;
+	// border: solid 4px #ee3347;
+	// outline: 5px solid black;
+	// background-color: #808184;
 `;
 
 const EachPersonsScoreContainer = styled.div`
@@ -133,8 +165,12 @@ const EachPersonsScoreContainer = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 100%;
-	margin-bottom: 18px;
+	width: 96%;
+	padding-bottom: 8px;
+	border: solid 4px black;
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 30px;
+	margin-bottom: 20px;
 `;
 
 const IconsContainer = styled.div`
@@ -142,7 +178,7 @@ const IconsContainer = styled.div`
 	flex-direction: row;
 	align-items: space-between;
 	justify-content: space-evenly;
-	width: 90%;
+	width: 100%;
 `;
 
 const IconDiv = styled.div`
@@ -165,7 +201,8 @@ const ScoreName = styled.p`
 	font-size: 24px;
 	letter-spacing: 2px;
 	text-align: center;
-	width: 90%;
+	width: 100%;
+	margin: 10px;
 `;
 
 const Score = styled.img`

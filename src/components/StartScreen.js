@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/topped-logo-red.png';
 import audio from '../assets/audio/click.mp3';
+import { tester } from '../firebase';
+import { resetAnalytics } from '../analytics/analytics';
 
 const StartScreen = () => {
 	const [start, setStart] = useState(false);
 	const [rules, setRules] = useState(false);
 	const audioToPlay = new Audio(audio);
 
+	tester();
+
 	const startClicked = () => {
+		resetAnalytics();
 		audioToPlay.play();
 		setStart(true);
 	};

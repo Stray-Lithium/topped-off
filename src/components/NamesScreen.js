@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiPlus } from 'react-icons/fi';
 import title from '../assets/whos-playing.png';
+import { storeNumberOfPlayers, storeStartTime } from '../analytics/analytics';
+import audio from '../assets/audio/click.mp3';
 
 const NamesScreen = () => {
 	const [name, setName] = useState('');
 	const [players, setPlayers] = useState({});
+	const [howManyPlayers, setHowManyPlayers] = useState(0);
+	const audioToPlay = new Audio(audio);
 
 	useEffect(() => {}, [players]);
 
@@ -15,6 +19,7 @@ const NamesScreen = () => {
 	};
 
 	const handleSubmit = (event) => {
+		audioToPlay.play();
 		let playerObject = {};
 		playerObject[name.toUpperCase()] = {
 			name: name.toUpperCase(),
@@ -23,14 +28,17 @@ const NamesScreen = () => {
 			martiniScore: 0,
 			mojitoScore: 0,
 		};
-		console.log(playerObject, 'obj');
+		setHowManyPlayers(howManyPlayers + 1);
 		setPlayers({ ...players, ...playerObject });
 		setName('');
 		event.preventDefault();
 	};
 
 	const ready = () => {
+		audioToPlay.play();
 		localStorage.setItem('names', JSON.stringify(players));
+		storeNumberOfPlayers(howManyPlayers);
+		storeStartTime();
 	};
 
 	const playerData = () => {

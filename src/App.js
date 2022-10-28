@@ -14,10 +14,14 @@ import LemonadeChallenge from './components/LemonadeChallenge';
 import DrinkScreen from './components/DrinkScreen';
 import ScoreScreen from './components/ScoreScreen';
 import LemonadeWhoCompleted from './components/LemonadeWhoCompleted';
+import EndScreen from './components/EndScreen';
+// import { doc, getDoc } from 'firebase/firestore';
 
-function App() {
+const App = () => {
 	const scoreBoard = useSelector((state) => state.ScoreBoard.scoreBoard);
 	const [names, setNames] = useState([]);
+	// const docRef = doc(db, 'cards');
+	// const docSnap = await getDoc(docRef);
 
 	useEffect(() => {
 		const items = JSON.parse(localStorage.getItem('names'));
@@ -29,6 +33,12 @@ function App() {
 	{
 		/* <h1>heloo</h1> */
 	}
+	// if (docSnap.exists()) {
+	// 	console.log('Document data:', docSnap.data());
+	// } else {
+	// 	// doc.data() will be undefined in this case
+	// 	console.log('No such document!');
+	// }
 
 	return (
 		<ScreenBackground>
@@ -59,11 +69,12 @@ function App() {
 					element={<LemonadeWhoCompleted />}
 				/>
 				<Route exact path='/drink' element={<DrinkScreen />} />
+				<Route exact path='/end-screen' element={<EndScreen />} />
 				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 		</ScreenBackground>
 	);
-}
+};
 
 const ScreenBackground = styled.div`
 	display: flex;

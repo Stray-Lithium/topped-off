@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
@@ -14,8 +14,15 @@ import whiteCard from '../assets/white-card.png';
 import blueCard from '../assets/blue-card.png';
 import LemonadeChallenge from './LemonadeScreen';
 import { scoreBoardRequest } from '../actions/scoreboard';
+import { cardColorRequest } from '../actions/card-color';
+import {
+	storeCompletedChallenge,
+	storeGameComplete,
+} from '../analytics/analytics';
+import audio from '../assets/audio/click.mp3';
 
 const ChallengeScreen = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { ingredient } = useParams();
 	const [names, setNames] = useState(false);
@@ -25,6 +32,11 @@ const ChallengeScreen = () => {
 	const [ingredientCardToRender, setIngredientCardToRender] = useState(false);
 	const [counter, setCounter] = useState(false);
 	const [startTimer, setStartTimer] = useState(false);
+	const handleOnSubmit = useCallback(
+		(scoreOrEnd) => navigate(`/${scoreOrEnd}`, { replace: true }),
+		[navigate]
+	);
+	const audioToPlay = new Audio(audio);
 
 	const ingredientRandomizer = () => {
 		if (currentCard === 'whiskeyScore') {
@@ -93,15 +105,35 @@ const ChallengeScreen = () => {
 	}, [cardContent]);
 
 	const complete = () => {
+		audioToPlay.play();
+		// dispatch(cardColorRequest(currentCard));
 		const namesCopy = names;
 		namesCopy[currentName][currentCard] += 1;
-		localStorage.setItem('names', JSON.stringify(namesCopy));
-		dispatch(scoreBoardRequest(true));
+		if (namesCopy[currentName][currentCard] === 1) {
+			handleOnSubmit('end-screen');
+			localStorage.setItem('winningNames', JSON.stringify([currentName]));
+			storeGameComplete(currentCard);
+		} else {
+			localStorage.setItem('names', JSON.stringify(namesCopy));
+			dispatch(scoreBoardRequest(true));
+			handleOnSubmit('ingredients');
+			storeCompletedChallenge();
+		}
 	};
 
 	const drinkScreen = () => {
 		localStorage.setItem('drinkers', JSON.stringify([currentName]));
 		return 'drink';
+	};
+
+	const startButtonClick = () => {
+		audioToPlay.play();
+		setStartTimer(true);
+	};
+
+	const doneButtonClick = () => {
+		audioToPlay.play();
+		setCounter(0);
 	};
 
 	const challenges = () => {
@@ -123,35 +155,29 @@ const ChallengeScreen = () => {
 						<CompleteDrinkContainer>
 							{cardContent.timer && counter > 0 ? (
 								counter < cardContent.timer ? (
-									<TimerButtonBlack onClick={() => setCounter(0)}>
+									<TimerButtonBlack onClick={() => doneButtonClick()}>
 										DONE
 									</TimerButtonBlack>
 								) : (
-									<TimerButton onClick={() => setStartTimer(true)}>
+									<TimerButton onClick={() => startButtonClick()}>
 										START
 									</TimerButton>
 								)
 							) : (
-								<Link
-									to={{
-										pathname: `/ingredients`,
+								<ChallengeComplete
+									onClick={() => {
+										complete();
 									}}
 								>
-									<ChallengeComplete
-										onClick={() => {
-											complete();
-										}}
-									>
-										COMPLETE
-									</ChallengeComplete>
-								</Link>
+									COMPLETE
+								</ChallengeComplete>
 							)}
 							<Link
 								to={{
 									pathname: `/${drinkScreen()}`,
 								}}
 							>
-								<Drink>DRINK</Drink>
+								<Drink onClick={() => audioToPlay.play()}>DRINK</Drink>
 							</Link>
 						</CompleteDrinkContainer>
 					</ScreenContainer>

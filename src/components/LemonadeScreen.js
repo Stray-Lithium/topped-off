@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { lemonBlankFill } from '../blanks/lemon';
+import audio from '../assets/audio/click.mp3';
 
 const LemonadeScreen = () => {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ const LemonadeScreen = () => {
 		() => navigate(`/lemonade-challenge`, { replace: true }),
 		[navigate]
 	);
+	const audioToPlay = new Audio(audio);
 
 	useEffect(() => {
 		const items = JSON.parse(localStorage.getItem('names'));
@@ -43,6 +45,7 @@ const LemonadeScreen = () => {
 	const checkboxNames = nameArray();
 
 	const checkboxClick = (e, checkName) => {
+		audioToPlay.play();
 		const addToCheck = e.target.checked;
 		if (addToCheck) {
 			setLemonPlayers([...lemonPlayers, checkName]);
@@ -53,6 +56,7 @@ const LemonadeScreen = () => {
 	};
 
 	const confirmLemonade = () => {
+		audioToPlay.play();
 		if (lemonPlayers.length > 0) {
 			localStorage.setItem('lemonNames', JSON.stringify(lemonPlayers));
 			handleOnSubmit();
@@ -62,6 +66,7 @@ const LemonadeScreen = () => {
 	};
 
 	const refreshCard = () => {
+		audioToPlay.play();
 		setLemonFill(lemonBlankFill().toUpperCase());
 		setButtonDisabled(false);
 	};
