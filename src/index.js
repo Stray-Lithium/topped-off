@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './fonts/Hanoded-Sunbird-Regular.ttf';
-import { BrowserRouter as HashRouter } from 'react-router-dom';
+import { BrowserRouter as HashRouter, hashHistory } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware } from 'redux';
