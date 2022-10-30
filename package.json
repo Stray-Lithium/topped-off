@@ -1,7 +1,7 @@
 {
   "name": "topped_off",
   "version": "0.1.0",
-  "homepage": "https://Stray-Lithium.github.io/topped-off",
+  "homepage": "https://Stray-Lithium.github.io/topped-off/",
   "private": false,
   "dependencies": {
     "@redux-saga/core": "^1.2.0",
