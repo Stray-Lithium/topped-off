@@ -70,7 +70,7 @@ const App = () => {
 				/>
 				<Route exact path='/drink' element={<DrinkScreen />} />
 				<Route exact path='/end-screen' element={<EndScreen />} />
-				<Route path='*' element={<Navigate to='/' replace />} />
+				{/* <Route path='*' element={<Navigate to='/topped-off/' replace />} /> */}
 			</Routes>
 		</ScreenBackground>
 	);
