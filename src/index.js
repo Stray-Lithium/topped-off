@@ -22,7 +22,7 @@ sagaMiddleware.run(routeSaga);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
-		<HashRouter>
+		<HashRouter history={hashHistory}>
 			<Provider store={store}>
 				<App />
 			</Provider>
