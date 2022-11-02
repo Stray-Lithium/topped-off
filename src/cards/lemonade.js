@@ -144,3 +144,4 @@ export const lemonadeCard = () => {
 //     `tell everyone how much money you currently have in your bank account.`,
 //     `talk in a strange accent for the next 5 minutes.`,
 //     `let the player to your right look through your phone for 1 minute.`,
+//		something 
