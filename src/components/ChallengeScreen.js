@@ -106,6 +106,8 @@ const ChallengeScreen = () => {
 		setCounter(cardContent.timer);
 	}, [cardContent]);
 
+	console.log(cardContent)
+
 	const complete = () => {
 		audioToPlay.play();
 		storeCard([cardContent.id], true);
