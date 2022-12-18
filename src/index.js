@@ -14,20 +14,20 @@ import routeSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
-	reducers,
-	composeWithDevTools(applyMiddleware(sagaMiddleware))
+  reducers,
+  composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 sagaMiddleware.run(routeSaga);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<React.StrictMode>
-		<HashRouter basename='/'>
-			<Provider store={store}>
-				<App />
-			</Provider>
-		</HashRouter>
-	</React.StrictMode>
+  <React.StrictMode>
+    <HashRouter basename='/'>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HashRouter>
+  </React.StrictMode>
 );
 
 //basename='/'
